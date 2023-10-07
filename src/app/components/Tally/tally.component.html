@@ -1,0 +1,32 @@
+<div class="cards">
+    <mat-card class="platform-card card" *ngFor="let platformUser of user.platformUser">
+        <mat-card-header>
+            {{ platformUser.platform.name }}
+        </mat-card-header>
+        <img mat-card-image [src]="user.profileImg">
+        <mat-card-content>
+            {{ platformUser.nick }}
+        </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="user-card card">
+        <mat-card-header>
+            {{ user.name }}
+        </mat-card-header>
+        <mat-card-header *ngIf="user.isIncel === true">
+            <div class="incel-warning" [ngSwitch]="user.gender">
+                <p *ngSwitchCase="'Male'">Known Incel</p>
+                <p *ngSwitchCase="'Female'">Known Femcel</p>
+                <p *ngSwitchCase="'Other'">Known AssaultHelicopterCel</p>
+                <p *ngSwitchDefault>Be Careful</p>
+            </div>
+        </mat-card-header>
+        <mat-card-subtitle>
+            {{ user.gender}}
+        </mat-card-subtitle>
+    <img mat-card-image [src]="user.profileImg">
+    <mat-card-content>
+        {{ user.description }}
+    </mat-card-content>
+    </mat-card>
+</div>

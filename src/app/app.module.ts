@@ -7,19 +7,17 @@ import { MaterialsModule } from './modules/materials.module';
 import { UserPanelComponent } from './components/user-panel/user-panel.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SwipeViewComponent } from './pages/swipe-view/swipe-view.component';
+import { TallyComponent } from './components/tally/tally.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserPanelComponent,
     HomeComponent,
-    SwipeViewComponent
-    ],
-  imports: [
-    MaterialsModule,
-    BrowserModule,
-    RouterModule.forRoot(appRoutes),
+    SwipeViewComponent,
+    TallyComponent,
   ],
+  imports: [MaterialsModule, BrowserModule, RouterModule.forRoot(appRoutes)],
   providers: [],
   bootstrap: [AppComponent],
 })
