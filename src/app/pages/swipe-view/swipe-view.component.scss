@@ -1,6 +1,22 @@
+
+.cards
 .user-card {
+    border-radius: 10px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 1%;
-    width: 21%;
+    margin-top: 6vmin;
+    width: 30vmin;
+    aspect-ratio: 5 / 7;
+    rotate: 5deg;
+
+    transition: transform 800ms cubic-bezier(.15,.85,.57,.97);
+    
+    &:hover {
+        transform: translateY(-7%) rotate(-5deg);
+    }
+}
+
+img {
+    margin-left: 1%;
+    margin-right: 1%;
 }
