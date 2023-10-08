@@ -1,15 +1,22 @@
-<div class="cards">
-    <mat-card class="platform-card card" *ngFor="let platformUser of user.platformUser">
-        <mat-card-header>
-            {{ platformUser.platform.name }}
-        </mat-card-header>
-        <img mat-card-image [src]="user.profileImg">
-        <mat-card-content>
-            {{ platformUser.nick }}
-        </mat-card-content>
-    </mat-card>
+<div class="cards" [@movementState]="state"
+    (@movementState.done)="onAnimationEnd(state)"
+>
+    <ng-container *ngFor="let platformUser of user.platformUser">
+        <mat-card class="platform-card" >
+            <mat-card-header>
+                {{ platformUser.platform.name }}
+            </mat-card-header>
+            <img mat-card-image [src]="user.profileImg">
+        </mat-card>
+        <mat-card class="small-card platform-card">
+            <mat-card-header>
+                {{ platformUser.nick }}
+            </mat-card-header>
+            <img mat-card-image [src]="platformUser.platform.platformImage">
+        </mat-card>
+    </ng-container>
     
-    <mat-card class="user-card card">
+    <mat-card class="user-card">
         <mat-card-header>
             {{ user.name }}
         </mat-card-header>

@@ -1,0 +1,20 @@
+.wrapper {
+    font-family: Nueva, 'sans-serif';
+    color: #F2F2F2;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h2 {
+    font-size: 48px;
+}
+
+.swiping-button {
+    margin-top: 10%;
+    width: 440px;
+    height: 300px;
+    background: radial-gradient(ellipse, #2eb123 0%, #0b1907 100%);
+    border-radius: 12px;
+}

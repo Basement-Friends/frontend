@@ -1,0 +1,16 @@
+<h2>Searching for players of: 
+    <br>
+    {{ nameOfGame }}
+</h2>
+
+<div class="tally-with-buttons">
+    <button mat-fab (click)="onPrevClick()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <div class="tallies">
+        <app-tally [user]="users[currentUserId]" [state]="tallyState" (animationEnded)="progressAnimation($event)"></app-tally>
+    </div>
+    <button mat-fab (click)="onNextClick()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+</div>

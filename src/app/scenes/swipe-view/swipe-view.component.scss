@@ -1,0 +1,43 @@
+h2 {
+    display: flex;
+    justify-content: center;
+    color: #F2F2F2;
+    font-family: Nueva, 'sans=serif';
+}
+
+.tally-with-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50%;
+    top: 50px;
+    margin-left: 5vmin;
+    margin-right: 5vmin;
+}
+
+.tallies {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    app-tally{
+        aspect-ratio: 5 / 7;
+    }
+    app-tally:nth-child(1) {
+        width: 30vmin;
+        
+    }
+    :nth-child(2) {
+        width: 5vmin;
+        font-size: 5%;
+    }
+    :nth-child(3) {
+        width: 5vmin;
+        font-size: 5%;
+    }
+}
+
+button {
+    z-index: 10;
+}
