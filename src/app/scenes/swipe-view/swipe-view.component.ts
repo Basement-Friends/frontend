@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Gender } from 'src/app/enums/gender';
 import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
 import { GamePlatform } from 'src/app/interfaces/gamePlatform';
-import { User } from 'src/app/interfaces/user';
+import { User } from 'src/app/classes/user';
 
 let steam: GamePlatform = {
   name: "Steam",

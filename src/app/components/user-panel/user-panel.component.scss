@@ -1,3 +1,18 @@
+.content {
+    display: flex;
+    max-height: 100%;
+    gap: 30px;
+}
+
+.profile-img {
+    width: 5px;
+}
+
+img {
+    max-height: 20px;    
+    aspect-ratio: 1 / 1;
+}
+
 button {
     background-color: #1e0072;
 }

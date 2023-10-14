@@ -1,9 +1,8 @@
 <div class="content">
-    <ng-container *ngIf="loginSrv.isLoggedIn; else loginButton">
+    <ng-container *ngIf="isLoggedIn; else loginButton">
         <mat-icon fontIcon="menu"></mat-icon>
         <mat-icon fontIcon="email"></mat-icon>
-        <div class="profile-img">
-        </div>
+        <img src="https://images.unsplash.com/photo-1601905317167-15747a4c7752?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZGFyaXVzfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60">
     </ng-container>
     <ng-template #loginButton>
         <button mat-button (click)="logIn()">Log In</button>

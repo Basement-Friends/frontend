@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { User } from 'src/app/interfaces/user';
+import { User } from 'src/app/classes/user';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
 

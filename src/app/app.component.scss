@@ -7,17 +7,20 @@ span {
     background: #060606;
     border-width: 1px;
     border-color: #272727;
+    height: 5vmax;
 }
 
 .navbar-stuff {
     display: flex;
     justify-content: space-around;
     font-family: Nueva, 'sans-serif';
+    cursor: pointer;
 }
 
 #title {
     font-family: Nueva, 'sans-serif';
     color: whitesmoke;
+    font-size: xx-large;
 }
 
 .background {
