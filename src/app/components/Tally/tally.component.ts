@@ -33,13 +33,13 @@ import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
         transform: 'translateX(0)'
       })),
 
-      transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToLeft}`, animate ('400ms ease-out')),
+      transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToLeft}`, animate ('400ms ease-in')),
       transition(`${TallyAnimationState.fadeOutToLeft} => ${TallyAnimationState.snapRight}`, animate ('0ms')),
-      transition(`${TallyAnimationState.snapRight} => ${TallyAnimationState.fadeIn}`, animate ('400ms')),
+      transition(`${TallyAnimationState.snapRight} => ${TallyAnimationState.fadeIn}`, animate ('800ms ease-out')),
       transition(`${TallyAnimationState.fadeIn} => ${TallyAnimationState.inPlace}`, animate('0ms')),
-      transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToRight}`, animate ('400ms ease-out')),
+      transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToRight}`, animate ('400ms ease-in')),
       transition(`${TallyAnimationState.fadeOutToRight} => ${TallyAnimationState.snapLeft}`, animate ('0ms')),
-      transition(`${TallyAnimationState.snapLeft} => ${TallyAnimationState.fadeIn}`, animate ('400ms')),
+      transition(`${TallyAnimationState.snapLeft} => ${TallyAnimationState.fadeIn}`, animate ('800ms ease-out')),
     ])
   ]
 })

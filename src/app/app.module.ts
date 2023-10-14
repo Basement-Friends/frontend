@@ -10,6 +10,9 @@ import { SwipeViewComponent } from './scenes/swipe-view/swipe-view.component';
 import { TallyComponent } from './components/tally/tally.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './scenes/login/login.component';
+import { SwipeSettingsComponent } from './scenes/swipe-settings/swipe-settings.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,8 +22,11 @@ import { LoginComponent } from './scenes/login/login.component';
     SwipeViewComponent,
     TallyComponent,
     LoginComponent,
+    SwipeSettingsComponent    
   ],
   imports: [
+    HttpClientModule,
+    ReactiveFormsModule,
     MaterialsModule,
     BrowserModule,
     RouterModule.forRoot(appRoutes),

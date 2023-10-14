@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-user-panel',
@@ -7,4 +9,12 @@ import { Component } from '@angular/core';
 })
 export class UserPanelComponent {
 
+  constructor(
+    protected loginSrv: LoginService,
+    protected router: Router
+  ){}
+
+  logIn(){
+    this.router.navigate(["/login"])
+  }
 }

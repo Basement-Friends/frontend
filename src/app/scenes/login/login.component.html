@@ -1,1 +1,16 @@
-<p>login works!</p>
+<div id="wrapper">
+    <div class="login">
+        <form [formGroup]="applyForm" (submit)="logIn()"> 
+            <mat-form-field>
+                <mat-label for="username">Username</mat-label>
+                <input matInput id="username" type="text" formControlName="username">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label for="password">Password</mat-label>
+                <input matInput id="password" type="text" formControlName="password">
+            </mat-form-field>
+            <button mat-button type="submit">Log in</button>
+        </form>
+    </div>
+</div>
