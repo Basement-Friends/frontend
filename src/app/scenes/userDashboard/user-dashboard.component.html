@@ -1,1 +1,11 @@
-<p>user-dashboard works!</p>
+<div class="wrapper">
+    <div class="background">
+        <ng-container *ngIf="loggedUser !== null">
+            <h3>
+                Witaj {{loggedUser.name}}
+            </h3>
+            <img src="{{loggedUser.profileImg}}">
+            <button mat-button (click)="toSwiping()">Start swiping!</button>
+        </ng-container>
+    </div>
+</div>

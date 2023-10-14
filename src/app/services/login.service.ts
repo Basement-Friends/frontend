@@ -10,13 +10,15 @@ import { User } from '../classes/user';
 })
 export class LoginService{
 
+  initialized: boolean = false
+
   authEndpoint: string = "assets/mockApi/users.json"
   authToken: string = ""
 
   isLoggedIn: boolean = false
   loggedUser$ = new BehaviorSubject<User | null | undefined>(undefined)
 
-  onLogIn: EventEmitter<void> = new EventEmitter()
+  // onLogIn: EventEmitter<User> = new EventEmitter()
 
   constructor(
     private httpClient: HttpClient,
@@ -24,17 +26,18 @@ export class LoginService{
   ) { }
 
   init() {
+    if(this.initialized === true)
+      return
+    this.initialized = true
     let username: string | null = localStorage.getItem('username')
-    console.log(username);
     if(username !== null)
     {
       return this.httpClient.get<User[]>(this.authEndpoint).subscribe((data: User[]) => {
         data.forEach(element => {
           if(element.name === username)
           {
-            console.log("data: ", element);
             this.loggedUser$.next(element)
-            this.onLogIn.emit()
+            //this.onLogIn.emit(element)
             return true          
           }
           else
@@ -56,7 +59,7 @@ export class LoginService{
             this.isLoggedIn = true
             localStorage.setItem('username', element.name)
             console.log("logging in as ", element)
-            this.onLogIn.emit()
+            //this.onLogIn.emit()
             this.router.navigate(["/"])
             this.loggedUser$.next(element)
             return

@@ -19,7 +19,6 @@ export class LoginGuard {
       return this.loginSrv.loggedUser$.pipe(
         filter(currentUser => currentUser !== undefined),
         map(currentUser => {
-          console.log(currentUser);
           if(currentUser)
             return true 
           else {

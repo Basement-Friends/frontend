@@ -1,5 +1,18 @@
 <div id="wrapper">
     <div id="backbody">
         Looking for:
+        {{games.length}}
+        <form [formGroup]="settingsControll" (submit)="startSwiping()">
+            <mat-form-field>                
+                <mat-label>Playing games:</mat-label>
+                <input type="text" aria-label="Games" matInput formControlName="gamesControll" [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let game of games" [value]="game.name">
+                        {{game.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <button mat-button type="submit">Start Swiping!</button>
+        </form>    
     </div>
 </div>

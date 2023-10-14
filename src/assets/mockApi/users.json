@@ -3,7 +3,7 @@
     "name": "dariusz",
     "password": "jebacStudenta123",
     "email": "d.pacan@polsl.pl",
-    "profileImg": "",
+    "profileImg": "/assets/defaultAvatar.png",
     "gender": "Male",
     "isIncel": 1
 },
@@ -11,7 +11,7 @@
     "name": "gabriel",
     "password": "jebacStudenta321",
     "email": "g.drab@polsl.pl",
-    "profileImg": "",
+    "profileImg": "/assets/defaultAvatar.png",
     "gender": "Male",
     "isIncel": 1
 }

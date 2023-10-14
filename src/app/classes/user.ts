@@ -5,7 +5,7 @@ export class User {
     name: string | undefined
     description: string | undefined
     email: string | undefined
-    profileImg: string | undefined
+    profileImg: string = "/assets/defaultAvatar.png"
     gender: Gender | undefined
     isIncel: boolean | undefined
     platformUser: {nick: string, profileImgSourse: string, platform: GamePlatform}[] | undefined

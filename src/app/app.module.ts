@@ -13,7 +13,7 @@ import { LoginComponent } from './scenes/login/login.component';
 import { SwipeSettingsComponent } from './scenes/swipe-settings/swipe-settings.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { UserDashboardComponent } from './scenes/user-dashboard/user-dashboard.component';
+import { UserDashboardComponent } from './scenes/userDashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import { UserDashboardComponent } from './scenes/user-dashboard/user-dashboard.c
     TallyComponent,
     LoginComponent,
     SwipeSettingsComponent,
-    UserDashboardComponent,
+    UserDashboardComponent
   ],
   imports: [
     HttpClientModule,
