@@ -10,7 +10,10 @@
                 <mat-label for="password">Password</mat-label>
                 <input matInput id="password" type="text" formControlName="password">
             </mat-form-field>
-            <button mat-button type="submit">Log in</button>
+            <div class="buttons">
+                <button mat-button type="submit">Log in</button>                
+                <button mat-button (click)="toRegister()">Register</button>
+            </div>
         </form>
     </div>
 </div>

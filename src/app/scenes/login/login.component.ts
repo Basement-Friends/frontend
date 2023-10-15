@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UserData } from 'src/app/classes/user-data';
 import { LoginService } from 'src/app/services/login.service';
 
@@ -11,7 +12,8 @@ import { LoginService } from 'src/app/services/login.service';
 export class LoginComponent {
 
   constructor(
-    private loginSrv: LoginService
+    private loginSrv: LoginService,
+    private router: Router
   ){}
 
   applyForm: FormGroup = new FormGroup({
@@ -22,9 +24,11 @@ export class LoginComponent {
   logIn(){    
     let user = new UserData(this.applyForm.value.username,
       this.applyForm.value.password)
+    this.loginSrv.login(user)
+  }
 
-      console.log("logging in as:\n", this.applyForm.value.username);
-      this.loginSrv.login(user)
-    }
+  toRegister() {
+    this.router.navigate(['/register'])
+  }
 
 }

@@ -61,7 +61,6 @@ export class LoginService{
           {
             this.isLoggedIn = true
             localStorage.setItem('username', element.name)
-            console.log("logging in as ", element)
             this.router.navigate(["/"])
             this.loggedUser$.next(element)
             this.onLogIn.emit(element)
@@ -69,6 +68,11 @@ export class LoginService{
           }
       })
     })      
+  }
+
+  logout() {
+    localStorage.removeItem('username')
+    this.loggedUser$.next(null)
   }
 
   getUsers(): Observable<User[]>{

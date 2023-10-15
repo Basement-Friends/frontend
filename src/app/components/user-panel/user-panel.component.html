@@ -1,10 +1,11 @@
 <div class="content">
-    <ng-container *ngIf="user !== undefined; else loginButton">
+    <ng-container *ngIf="user !== undefined && user !== null; else loginButton">
         <mat-icon fontIcon="menu"></mat-icon>
         <mat-icon fontIcon="email"></mat-icon>
         <img (click)="toDashboard()" src="{{user.profileImg}}">    
     </ng-container>
     <ng-template #loginButton>
         <button mat-button (click)="logIn()">Log In</button>
+        <button mat-button (click)="register()">Register</button>
     </ng-template>
 </div>

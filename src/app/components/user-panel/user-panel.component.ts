@@ -14,13 +14,13 @@ export class UserPanelComponent implements OnInit {
   private _isLoggedIn: boolean = false
   get isLoggedIn(){ return this._isLoggedIn }
 
-  private _user: User | undefined = undefined
+  private _user: User | null | undefined = undefined
 
-  get user(): User | undefined {
+  get user(): User | null | undefined {
      return this._user
   }
 
-  set user(user: User){
+  set user(user: User | null){
     this._user = user
   }
 
@@ -35,12 +35,10 @@ export class UserPanelComponent implements OnInit {
   }
     
   private updateUser() {
-    console.log("updating")
     this.loginSrv.loggedUser$.pipe(
-      tap(user => console.log("user is ", user)),
       filter(user => user !== undefined),
       map(currentUser => {
-        if (currentUser !== null && currentUser !== undefined)
+        if (currentUser !== undefined)
           this.user = currentUser
       })
     ).subscribe()
@@ -52,5 +50,9 @@ export class UserPanelComponent implements OnInit {
 
   logIn(){
     this.router.navigate(["/login"])
+  }
+
+  register(){
+    this.router.navigate(['/register'])
   }
 }

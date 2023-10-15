@@ -14,6 +14,7 @@ import { SwipeSettingsComponent } from './scenes/swipe-settings/swipe-settings.c
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserDashboardComponent } from './scenes/userDashboard/user-dashboard.component';
+import { RegisterComponent } from './scenes/register/register.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { UserDashboardComponent } from './scenes/userDashboard/user-dashboard.co
     TallyComponent,
     LoginComponent,
     SwipeSettingsComponent,
-    UserDashboardComponent
+    UserDashboardComponent,
+    RegisterComponent,
   ],
   imports: [
     HttpClientModule,

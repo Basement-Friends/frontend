@@ -23,7 +23,6 @@ export class UserDashboardComponent implements OnInit {
     this.loginSrv.loggedUser$.pipe(
       filter(currentUser => currentUser !== undefined),
       map(currentUser => {
-        console.log(currentUser)
         if(currentUser !== undefined && currentUser !== null)
           this.loggedUser = currentUser
       })
@@ -32,6 +31,11 @@ export class UserDashboardComponent implements OnInit {
 
   toSwiping() {
     this.router.navigate(["swipesetting"])
+  }
+
+  logout() {
+    this.loginSrv.logout()
+    this.router.navigate(['/login'])
   }
 
 }

@@ -20,7 +20,6 @@ export class LoginGuard {
         filter(currentUser => {
           return currentUser !== undefined}),
         map(currentUser => {
-          console.log(currentUser)
           if(currentUser)
              return true
           else {
