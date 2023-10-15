@@ -17,10 +17,12 @@ export class LoginGuard {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean>{
       return this.loginSrv.loggedUser$.pipe(
-        filter(currentUser => currentUser !== undefined),
+        filter(currentUser => {
+          return currentUser !== undefined}),
         map(currentUser => {
+          console.log(currentUser)
           if(currentUser)
-            return true 
+             return true
           else {
             this.router.navigateByUrl("/login") 
             return false

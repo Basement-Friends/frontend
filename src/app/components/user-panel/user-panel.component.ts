@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { filter, map } from 'rxjs';
+import { filter, map, tap } from 'rxjs';
 import { User } from 'src/app/classes/user';
 import { LoginService } from 'src/app/services/login.service';
 
@@ -31,16 +31,21 @@ export class UserPanelComponent implements OnInit {
 
   ngOnInit(): void {
       this.loginSrv.init()
-      this.loginSrv.loggedUser$.pipe(
-        filter(user => user !== null && user !== undefined)
-      )
-      .subscribe(user => {
-        console.log(user);
-        if(user !== null && user !== undefined)
-          this.user = user
-      })
+      this.loginSrv.onLogIn.subscribe(this.updateUser())
   }
     
+  private updateUser() {
+    console.log("updating")
+    this.loginSrv.loggedUser$.pipe(
+      tap(user => console.log("user is ", user)),
+      filter(user => user !== undefined),
+      map(currentUser => {
+        if (currentUser !== null && currentUser !== undefined)
+          this.user = currentUser
+      })
+    ).subscribe()
+  }
+
   toDashboard() {
     this.router.navigate([`/profile/${this.user?.name}`])
   }

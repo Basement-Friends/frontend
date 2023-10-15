@@ -13,7 +13,6 @@ export class UserDashboardComponent implements OnInit {
 
   loggedUser: User | null = null
 
-  scrub: any
 
   constructor(
     private loginSrv: LoginService,
@@ -21,14 +20,14 @@ export class UserDashboardComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.scrub = this.loginSrv.loggedUser$.pipe(
+    this.loginSrv.loggedUser$.pipe(
       filter(currentUser => currentUser !== undefined),
-    ).subscribe({
-      next: (user: User | null | undefined) =>
-      {
-        if(user !== undefined && user !== null)
-          this.loggedUser = user
-    }})
+      map(currentUser => {
+        console.log(currentUser)
+        if(currentUser !== undefined && currentUser !== null)
+          this.loggedUser = currentUser
+      })
+    ).subscribe()
   }
 
   toSwiping() {

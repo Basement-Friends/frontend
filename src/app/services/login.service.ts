@@ -18,6 +18,8 @@ export class LoginService{
   isLoggedIn: boolean = false
   loggedUser$ = new BehaviorSubject<User | null | undefined>(undefined)
 
+  onLogIn: EventEmitter<User> = new EventEmitter<User>
+
   // onLogIn: EventEmitter<User> = new EventEmitter()
 
   constructor(
@@ -33,18 +35,19 @@ export class LoginService{
     if(username !== null)
     {
       return this.httpClient.get<User[]>(this.authEndpoint).subscribe((data: User[]) => {
+        let isSet: boolean = false
         data.forEach(element => {
           if(element.name === username)
           {
             this.loggedUser$.next(element)
-            //this.onLogIn.emit(element)
-            return true          
+            this.onLogIn.emit(element)
+            isSet = true          
           }
-          else
-            return false
-          });
-        return false
-      })
+        })
+        if(isSet === false)
+          this.loggedUser$.next(null)
+        return isSet
+    })
     }
     else
       return false
@@ -59,9 +62,9 @@ export class LoginService{
             this.isLoggedIn = true
             localStorage.setItem('username', element.name)
             console.log("logging in as ", element)
-            //this.onLogIn.emit()
             this.router.navigate(["/"])
             this.loggedUser$.next(element)
+            this.onLogIn.emit(element)
             return
           }
       })
