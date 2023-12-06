@@ -1,21 +1,19 @@
 <div class="cards" [@movementState]="state"
     (@movementState.done)="onAnimationEnd(state)"
->
-    <ng-container *ngFor="let platformUser of user.platformUser">
-        <mat-card class="platform-card" >
-            <mat-card-header>
-                {{ platformUser.platform.name }}
-            </mat-card-header>
-            <img mat-card-image [src]="user.profileImg">
-        </mat-card>
-        <mat-card class="small-card platform-card">
-            <mat-card-header>
-                {{ platformUser.nick }}
-            </mat-card-header>
-            <img mat-card-image [src]="platformUser.platform.platformImage">
-        </mat-card>
-    </ng-container>
-    
+>    
+    <div class="platforms">
+        <ng-container *ngFor="let platformUser of user.platformUser">
+            <mat-card class="platform-card">
+                <mat-card-header>
+                    {{ platformUser.platform.name }}
+                </mat-card-header>
+                <h3>
+                    {{ platformUser.nick }}
+                </h3>
+            </mat-card>
+        </ng-container>
+    </div>
+
     <mat-card class="user-card">
         <mat-card-header>
             {{ user.name }}
@@ -31,9 +29,9 @@
         <mat-card-subtitle>
             {{ user.gender}}
         </mat-card-subtitle>
-    <img mat-card-image [src]="user.profileImg">
-    <mat-card-content>
-        {{ user.description }}
-    </mat-card-content>
+        <img mat-card-image [src]="user.profileImg">
+        <mat-card-content>
+            {{ user.description }}
+        </mat-card-content>
     </mat-card>
 </div>
