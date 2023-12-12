@@ -12,7 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './scenes/login/login.component';
 import { SwipeSettingsComponent } from './scenes/swipe-settings/swipe-settings.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserDashboardComponent } from './scenes/userDashboard/user-dashboard.component';
 import { RegisterComponent } from './scenes/register/register.component';
 
@@ -30,6 +30,7 @@ import { RegisterComponent } from './scenes/register/register.component';
   ],
   imports: [
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
     MaterialsModule,
     BrowserModule,

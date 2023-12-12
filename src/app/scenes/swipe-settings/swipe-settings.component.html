@@ -1,18 +1,40 @@
 <div id="wrapper">
     <div id="backbody">
         Looking for:
-        {{games.length}}
-        <form [formGroup]="settingsControll" (submit)="startSwiping()">
+        <form (submit)="startSwiping()" [formGroup]="searchSettingsForm">
+            <label>Gender:</label>
+            <mat-radio-group formControlName="gender">
+                @for(gender of genders; track gender){
+                    <mat-radio-button [value]="gender">
+                        {{ gender }}
+                    </mat-radio-button>
+                }
+                <mat-radio-button [value]="null">
+                    Doesn't matter
+                </mat-radio-button>
+            </mat-radio-group>
+              
+            You selected:
+            {{ selectedGender }}
             <mat-form-field>                
                 <mat-label>Playing games:</mat-label>
-                <input type="text" aria-label="Games" matInput formControlName="gamesControll" [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let game of games" [value]="game.name">
-                        {{game.name}}
-                    </mat-option>
+                <input #input type="text" aria-label="Games" matInput formArrayName="games" [matAutocomplete]="auto" (input)="filter()" (focus)="filter()">
+                <mat-autocomplete requireSelection #auto="matAutocomplete" (optionSelected)="selected($event.option.value)">
+                    @for(game of filteredOptions; track game){
+                        <mat-option *ngIf="selectedGames.indexOf(game) === -1" [value]="game">{{ game.name }}</mat-option>    
+                    }   
                 </mat-autocomplete>
             </mat-form-field>
             <button mat-button type="submit">Start Swiping!</button>
+            <h3>
+                Games:
+            </h3>
+            {{ selectedGames }}
+            <ng-container formArrayName="games">
+                <h4 *ngFor="let game of gameForms.controls">
+                    {{ game }}
+                </h4>
+            </ng-container>
         </form>    
     </div>
 </div>
