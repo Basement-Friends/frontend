@@ -27,6 +27,7 @@ import { RegisterComponent } from './scenes/register/register.component';
     SwipeSettingsComponent,
     UserDashboardComponent,
     RegisterComponent,
+    RegisterComponent,
   ],
   imports: [
     HttpClientModule,

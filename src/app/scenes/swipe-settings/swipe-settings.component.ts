@@ -28,7 +28,10 @@ export class SwipeSettingsComponent implements OnInit {
   selectedGender: Gender | null = null
   genders: string[] = Object.values(Gender);
 
-  searchSettingsForm!: FormGroup
+  searchSettingsForm: FormGroup = new FormGroup({
+    gender: new FormControl(null),
+    games: new FormArray([])
+  })
   get gameForms() {
     return this.searchSettingsForm.get('games') as FormArray
   }
@@ -40,11 +43,6 @@ export class SwipeSettingsComponent implements OnInit {
   ){}
   
   ngOnInit() {
-    this.searchSettingsForm = this.fb.group({
-      gender: null,
-      games: this.fb.array([]),
-    })
-
     console.log(this.searchSettingsForm);
     console.log("game form: " + this.gameForms);
 

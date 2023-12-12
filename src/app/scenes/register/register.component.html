@@ -1,1 +1,38 @@
-<p>register works!</p>
+<div id="wrapper">
+    <div class="register">
+        <form [formGroup]="registerForm" (submit)="register()">
+            <mat-form-field>
+                <mat-label>Email</mat-label>
+                @if (email?.invalid && email?.touched){
+                    <mat-error>
+                        Your email looks wrong
+                    </mat-error>
+                }
+                <input matInput formControlName="email" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                @if(password?.invalid && password?.touched) {
+                    <mat-error>
+                        Password requires 8 signs, capital case and lower case signs and numbers!
+                    </mat-error>
+                }
+                <input matInput formControlName="password" required>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Repeat password</mat-label>
+                @if(registerForm.hasError('notSame') || (passwordRepeat?.touched || password?.touched)) {
+                    <mat-error>
+                        Passwords don't match!
+                    </mat-error>
+                }
+                <input matInput formControlName="passwordRepeat" required>
+            </mat-form-field>
+            <button mat-button type="submit" [disabled]="registerForm.invalid">Register</button>
+        </form>
+    </div>
+</div>

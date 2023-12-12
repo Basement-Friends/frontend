@@ -1,8 +1,9 @@
 <div id="wrapper">
     <div id="backbody">
+        Value: {{ searchSettingsForm.value | json }}
         Looking for:
         <form (submit)="startSwiping()" [formGroup]="searchSettingsForm">
-            <label>Gender:</label>
+            <mat-label>Gender:</mat-label>
             <mat-radio-group formControlName="gender">
                 @for(gender of genders; track gender){
                     <mat-radio-button [value]="gender">
@@ -13,9 +14,6 @@
                     Doesn't matter
                 </mat-radio-button>
             </mat-radio-group>
-              
-            You selected:
-            {{ selectedGender }}
             <mat-form-field>                
                 <mat-label>Playing games:</mat-label>
                 <input #input type="text" aria-label="Games" matInput formArrayName="games" [matAutocomplete]="auto" (input)="filter()" (focus)="filter()">
