@@ -30,7 +30,6 @@ export class UserPanelComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-      this.loginSrv.init()
       this.loginSrv.onLogIn.subscribe(this.updateUser())
   }
     

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Gender } from 'src/app/enums/gender';
 import { Game } from 'src/app/interfaces/game';
 import { GamesService } from 'src/app/services/games.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-swipe-settings',
@@ -39,7 +40,8 @@ export class SwipeSettingsComponent implements OnInit {
   constructor(
     private gamesService: GamesService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UsersService
   ){}
   
   ngOnInit() {
@@ -59,27 +61,34 @@ export class SwipeSettingsComponent implements OnInit {
   }
 
   addGame(game: Game) {
-    console.log(game);
+    console.log("selected game: ", game);
     const _game = this.fb.group({
       id: game.id,
       name: game.name
     })
 
     this.gameForms.push(_game)
+    this.selectedGames.push(game)
+    console.log(this.gameForms);
   }
 
   deleteGame(i: number) {
     this.gameForms.removeAt(i)
   }
 
+  displayGame(game: Game) {
+    return game && game.name ? game.name : ''
+  }
+
   startSwiping() {
     console.log(`gender = ${this.searchSettingsForm.value.gender}\ngames = ${this.searchSettingsForm.value.games}`)
+    this.userService.getUsers()
     if(this.selectedGames?.length === 0) {
       alert("Please select game(s)!")
       return
     }
     console.log(`Looking for ${this.selectedGender}, playing ${this.selectedGames}`)
-    // this.router.navigate(["/swiping"])
+    this.router.navigate(["/swiping"])
   }
 
   filter() {
@@ -88,7 +97,6 @@ export class SwipeSettingsComponent implements OnInit {
   }
 
   selected(e: Game) {
-    console.log(e);
     this.addGame(e)
   }
 }

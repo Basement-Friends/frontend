@@ -17,7 +17,7 @@
             <mat-form-field>                
                 <mat-label>Playing games:</mat-label>
                 <input #input type="text" aria-label="Games" matInput formArrayName="games" [matAutocomplete]="auto" (input)="filter()" (focus)="filter()">
-                <mat-autocomplete requireSelection #auto="matAutocomplete" (optionSelected)="selected($event.option.value)">
+                <mat-autocomplete requireSelection #auto="matAutocomplete" (optionSelected)="selected($event.option.value)" [displayWith]="displayGame">
                     @for(game of filteredOptions; track game){
                         <mat-option *ngIf="selectedGames.indexOf(game) === -1" [value]="game">{{ game.name }}</mat-option>    
                     }   
@@ -27,10 +27,9 @@
             <h3>
                 Games:
             </h3>
-            {{ selectedGames }}
             <ng-container formArrayName="games">
-                <h4 *ngFor="let game of gameForms.controls">
-                    {{ game }}
+                <h4 *ngFor="let game of selectedGames">
+                    {{ game.name }}
                 </h4>
             </ng-container>
         </form>    

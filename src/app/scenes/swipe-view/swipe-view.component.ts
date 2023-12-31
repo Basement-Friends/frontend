@@ -93,6 +93,8 @@ export class SwipeViewComponent implements OnInit {
  users: User[] = [
   {
     name: "Mahatma",
+    lastName: "Gandhi",
+    nickName: "BigG",
     description: "I want to play Civ ad destroy my enemies with nuclear fire!!!",
     email: "mgandhi@killemwithnukes.in",
     profileImg: "assets/profile.png",
@@ -112,6 +114,8 @@ export class SwipeViewComponent implements OnInit {
   },
   {
     name: "Theresa",
+    lastName: "Bojaxhiu",
+    nickName: "MommaPain",
     description: "Suffer 4 Gawd!",
     email: "theresamommy@letemsuffer.in",
     profileImg: "assets/profile2.png",
@@ -128,6 +132,8 @@ export class SwipeViewComponent implements OnInit {
     ]},
     {
       name: "Alexandros",
+      lastName: "O Megas",
+      nickName: "AlphaAlex",
       description: "Let's conquer the world together!",
       email: "oMegasAlexandros@worldconqueror.gr",
       profileImg: "https://images.unsplash.com/photo-1641563127349-c9d58bc9847d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxleGFuZGVyJTIwdGhlJTIwZ3JlYXR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
@@ -144,6 +150,8 @@ export class SwipeViewComponent implements OnInit {
       ]},
       {
         name: "Imhotep",
+        lastName: "",
+        nickName: "MegaImho",
         description: "Building better world",
         email: "imhotep@pyramids.eg",
         profileImg: "https://images.unsplash.com/photo-1695901742041-5b56f69b17a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1ob3RlcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
