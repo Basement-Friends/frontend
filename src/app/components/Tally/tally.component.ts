@@ -20,11 +20,19 @@ import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
         opacity: 0,
         transform: 'translateX(100%)'
       })),
+      state(TallyAnimationState.fadeOutToBottom, style({
+        opacity: 0,
+        transform: 'translateY(100%)'
+      })),
       state(TallyAnimationState.snapLeft, style({
         opacity: 0,
         transform: 'translateX(-100%)'
       })),
       state(TallyAnimationState.snapRight, style({
+        opacity: 0,
+        transform: 'translateX(100%)'
+      })),
+      state(TallyAnimationState.snapRightFromBottom, style({
         opacity: 0,
         transform: 'translateX(100%)'
       })),
@@ -37,6 +45,8 @@ import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
       transition(`${TallyAnimationState.fadeOutToLeft} => ${TallyAnimationState.snapRight}`, animate ('0ms')),
       transition(`${TallyAnimationState.snapRight} => ${TallyAnimationState.fadeIn}`, animate ('800ms ease-out')),
       transition(`${TallyAnimationState.fadeIn} => ${TallyAnimationState.inPlace}`, animate('0ms')),
+      transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToBottom}`, animate('800ms ease-in')),
+      transition(`${TallyAnimationState.fadeOutToBottom} => ${TallyAnimationState.snapRight}`, animate('0ms')),
       transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToRight}`, animate ('400ms ease-in')),
       transition(`${TallyAnimationState.fadeOutToRight} => ${TallyAnimationState.snapLeft}`, animate ('0ms')),
       transition(`${TallyAnimationState.snapLeft} => ${TallyAnimationState.fadeIn}`, animate ('800ms ease-out')),
@@ -52,9 +62,16 @@ export class TallyComponent{
   state: TallyAnimationState = TallyAnimationState.fadeIn
 
   @Output()
-  animationEnded = new EventEmitter<TallyAnimationState>();
+  animationEnded = new EventEmitter<TallyAnimationState>()
+
+  @Output()
+  rejected = new EventEmitter<User>()
 
   onAnimationEnd(s: TallyAnimationState) {
     this.animationEnded.emit(s)
+  }
+
+  onRejected() {
+    this.rejected.emit(this.user)
   }
 }

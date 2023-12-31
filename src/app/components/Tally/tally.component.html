@@ -12,6 +12,14 @@
                 </h3>
             </mat-card>
         </ng-container>
+        <div class="buttons">
+            <button class="chat" mat-fab>
+                <mat-icon>textsms</mat-icon>
+            </button>
+            <button class="close" mat-fab (click)="onRejected()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
     </div>
 
     <mat-card class="user-card">

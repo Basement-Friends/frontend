@@ -44,6 +44,10 @@ export class SwipeViewComponent implements OnInit {
     this.tallyState = TallyAnimationState.fadeOutToRight
   }
 
+  onRejected(user: User){
+    this.tallyState = TallyAnimationState.fadeOutToBottom
+  }
+
   progressAnimation(prevState: TallyAnimationState){
     switch(prevState){
       case TallyAnimationState.fadeOutToLeft:
@@ -52,9 +56,9 @@ export class SwipeViewComponent implements OnInit {
       case TallyAnimationState.snapRight:
         this.incrementUserId();
         this.tallyState = TallyAnimationState.fadeIn
-        break;
+        break
       case TallyAnimationState.fadeIn:
-        this.tallyState = TallyAnimationState.inPlace;
+        this.tallyState = TallyAnimationState.inPlace
         break;
       case TallyAnimationState.fadeOutToRight:
         this.tallyState = TallyAnimationState.snapLeft
@@ -62,7 +66,10 @@ export class SwipeViewComponent implements OnInit {
       case TallyAnimationState.snapLeft:
         this.decrementUserId();
         this.tallyState = TallyAnimationState.fadeIn
-        break;
+        break
+      case TallyAnimationState.fadeOutToBottom:
+        this.tallyState = TallyAnimationState.snapRight
+        break
     }
   }
 
