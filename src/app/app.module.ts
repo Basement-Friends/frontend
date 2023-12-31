@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
@@ -11,10 +11,11 @@ import { TallyComponent } from './components/tally/tally.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './scenes/login/login.component';
 import { SwipeSettingsComponent } from './scenes/swipe-settings/swipe-settings.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserDashboardComponent } from './scenes/userDashboard/user-dashboard.component';
 import { RegisterComponent } from './scenes/register/register.component';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,9 @@ import { RegisterComponent } from './scenes/register/register.component';
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [
+    provideHttpClient(withInterceptors([authInterceptor]))
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

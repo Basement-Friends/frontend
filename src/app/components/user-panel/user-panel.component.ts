@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { filter, map, tap } from 'rxjs';
 import { User } from 'src/app/classes/user';
+import { AuthService } from 'src/app/services/auth.service';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -26,6 +27,7 @@ export class UserPanelComponent implements OnInit {
 
   constructor(
     protected loginSrv: LoginService,
+    protected authSrv: AuthService,
     protected router: Router
   ){}
 

@@ -45,9 +45,6 @@ export class SwipeSettingsComponent implements OnInit {
   ){}
   
   ngOnInit() {
-    console.log(this.searchSettingsForm);
-    console.log("game form: " + this.gameForms);
-
     this.gamesService.getGames().subscribe( games => {
       this.games.push(...games)
     })
@@ -61,15 +58,14 @@ export class SwipeSettingsComponent implements OnInit {
   }
 
   addGame(game: Game) {
-    console.log("selected game: ", game);
     const _game = this.fb.group({
       id: game.id,
       name: game.name
     })
-
-    this.gameForms.push(_game)
+    console.log(this.gameForms)
+    let gf = this.gameForms
+    this.gameForms?.push(_game)
     this.selectedGames.push(game)
-    console.log(this.gameForms);
   }
 
   deleteGame(i: number) {
@@ -81,13 +77,11 @@ export class SwipeSettingsComponent implements OnInit {
   }
 
   startSwiping() {
-    console.log(`gender = ${this.searchSettingsForm.value.gender}\ngames = ${this.searchSettingsForm.value.games}`)
     this.userService.getUsers()
     if(this.selectedGames?.length === 0) {
       alert("Please select game(s)!")
       return
     }
-    console.log(`Looking for ${this.selectedGender}, playing ${this.selectedGames}`)
     this.router.navigate(["/swiping"])
   }
 

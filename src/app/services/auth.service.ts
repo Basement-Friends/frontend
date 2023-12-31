@@ -13,15 +13,12 @@ export class AuthService {
     private loginService: LoginService,
     private registerService: RegisterService
   ) { 
-    console.log("constructing")
-    console.log(this.loginService)
     this.loginService.onLogIn.subscribe(token => this.setToken(token))
     this.loginService.onLogOut.subscribe(() => this.resetToken)
     this.registerService.onRegister.subscribe(token => this.setToken(token))
   }
 
   setToken(token: string) {
-    console.log(token);
     this.token$.next(token)
   }
 
