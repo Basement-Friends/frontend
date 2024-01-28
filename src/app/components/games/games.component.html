@@ -1,0 +1,44 @@
+<mat-accordion class="games-panel">
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            Your games
+        </mat-expansion-panel-header>
+        @for(game of games; track game.name) {
+            <mat-panel-description class="game">
+                <p><b>{{ game.name }}</b></p>
+                <button (click)="removeGame(game.id)"><mat-icon>close</mat-icon></button>
+            </mat-panel-description>
+            <mat-divider></mat-divider>
+        }
+        <mat-action-row>
+            <button mat-button color="primary" (click)="addGame()">Add Game</button>
+          </mat-action-row>
+        @if(addingGame === true){
+            <form (submit)="confirmNewGame()" class="inputs">
+                <mat-form-field class="game-input">
+                    <mat-label>Name</mat-label>
+                    <input 
+                        #gameInput
+                        placeholder="Game Name"
+                        matInput
+                        [matAutocomplete]="auto"
+                        [formControl]="gameControl"
+                        (focus)="filterGames()"
+                        (input)="filterGames()"
+                        >
+                    <mat-autocomplete 
+                        requireSelection
+                        #auto="matAutocomplete"
+                        [displayWith]="displayGame"
+                        (optionSelected)="selectGame($event.option.value)"
+                        >
+                    @for(option of filteredOptions; track option){
+                        <mat-option [value]="option" >{{ option.name }}</mat-option>
+                    }
+                    </mat-autocomplete>
+                </mat-form-field>
+                <button mat-button type="submit" (click)="confirmNewGame()">Add</button>
+            </form>
+        }
+    </mat-expansion-panel>
+</mat-accordion>

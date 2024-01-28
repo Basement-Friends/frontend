@@ -8,14 +8,30 @@
 
 .background {
     width: 50%;
-    background-color: whitesmoke;
+    background-color: #F2F2F2;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 3vmin;
+    padding: 3vmin;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
 }
 
 img {
     width: 50%;
     aspect-ratio: 1;
+}
+
+.button {
+    background-color: #3d0050;
+    width: 50%;
+}
+
+app-games {
+    background-color: #3d0050;
+    width: 50%;
 }

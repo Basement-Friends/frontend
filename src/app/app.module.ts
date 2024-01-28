@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
@@ -16,6 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserDashboardComponent } from './scenes/userDashboard/user-dashboard.component';
 import { RegisterComponent } from './scenes/register/register.component';
 import { authInterceptor } from './interceptors/auth.interceptor';
+import { GamesComponent } from './components/games/games.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { authInterceptor } from './interceptors/auth.interceptor';
     SwipeSettingsComponent,
     UserDashboardComponent,
     RegisterComponent,
+    GamesComponent
   ],
   imports: [
     HttpClientModule,
