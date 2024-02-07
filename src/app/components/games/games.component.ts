@@ -1,28 +1,41 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Game } from 'src/app/interfaces/game';
+import { SearchContainerService } from 'src/app/services/search-container.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-games',
   templateUrl: './games.component.html',
   styleUrl: './games.component.scss',
 })
-export class GamesComponent {
-//@Input()
-  games: Game[] = [
-   {id: 0, name: "Europa Universalis IV"},
-   {id: 1, name: "Sid Meier's Civilization V"},
-  ]
+export class GamesComponent implements OnInit{
+  //@Input()
+  games: Game[] = []
   filteredOptions: Game[] = []
   selectedGame: Game | undefined
-
+  
   @ViewChild('gameInput') gameInput!: ElementRef<HTMLInputElement>
 
   gameControl = new FormControl('', [Validators.required])
- 
+  
   step: number = 0;
-
+  
   addingGame: boolean = false
+  
+  constructor(
+    private gamesSrv: SearchContainerService
+  ) {}
+
+  ngOnInit(): void {
+    this.gamesSrv.getGames()
+    .subscribe(games => 
+      {
+        // this.games = games
+        this.games = games
+        console.log("games ", this.games)
+    })
+  }
 
   removeGame(id: number) {
     this.games = this.games.filter(item => item.id !== id)
@@ -48,7 +61,10 @@ export class GamesComponent {
 
   filterGames(){
     const filterValue = this.gameInput.nativeElement.value.toLowerCase()
-    this.filteredOptions = this.games.filter( game => game.name.toLowerCase().includes(filterValue))
+    this.filteredOptions = this.games.filter( game => {
+      console.log(game)
+      game.name.toLowerCase().includes(filterValue)
+    })
   }
 
   displayGame(game: Game) {

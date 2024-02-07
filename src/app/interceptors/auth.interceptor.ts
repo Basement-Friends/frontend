@@ -1,23 +1,27 @@
 import { HttpContext, HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
-import { filter } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 
 export const BYPASS_AUTH = new HttpContextToken(() => false)
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  if(req.context.get(BYPASS_AUTH) === false){
+  if(req.context.get(BYPASS_AUTH) === false)
+  {
     const authService: AuthService = inject(AuthService)
-    authService.token$.pipe(
-      filter(token => token !== undefined)
+
+    return authService.token$.pipe(
+      filter(token => token !== undefined),
+      switchMap(token => {
+        const authReq = req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        return next(authReq)
+      })
     )
-    .subscribe(token => {
-      const clonedReq = req.clone({ setHeaders: {
-        Authorization: `Bearer ${token}`
-      }})
-      console.log(clonedReq)
-      return next(clonedReq)
-    })
   }
   return next(req);
-};
+}

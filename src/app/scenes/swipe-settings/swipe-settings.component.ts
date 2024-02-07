@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Gender } from 'src/app/enums/gender';
 import { Game } from 'src/app/interfaces/game';
-import { GamesService } from 'src/app/services/games.service';
+import { SearchContainerService } from 'src/app/services/search-container.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -16,11 +16,11 @@ export class SwipeSettingsComponent implements OnInit {
   
   
   games: Game[] = []
-  private _selectedGames: Array<Game> = new Array<Game>(0)
-  get selectedGames(): Array<Game> {
+  private _selectedGames: Game[] = []
+  get selectedGames(): Game[] {
     return this._selectedGames
   }
-  set selectedGames(games: Array<Game>){
+  set selectedGames(games: Game[]){
     this._selectedGames = games
   }
 
@@ -38,10 +38,10 @@ export class SwipeSettingsComponent implements OnInit {
   }
 
   constructor(
-    private gamesService: GamesService,
+    private gamesService: SearchContainerService,
     private router: Router,
     private fb: FormBuilder,
-    private userService: UsersService
+    private userService: UsersService,
   ){}
   
   ngOnInit() {
@@ -82,6 +82,7 @@ export class SwipeSettingsComponent implements OnInit {
       alert("Please select game(s)!")
       return
     }
+    this.gamesService.selectedGames = this.selectedGames
     this.router.navigate(["/swiping"])
   }
 

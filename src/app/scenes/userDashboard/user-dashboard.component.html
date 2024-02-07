@@ -2,7 +2,7 @@
     <div class="background">
         <ng-container *ngIf="loggedUser !== null">
             <h1>
-                Hello {{loggedUser.name}}
+                Hello {{ loggedUser.username }}
             </h1>
             <img src="{{loggedUser.profileImg}}">
             <app-games></app-games>

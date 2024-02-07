@@ -15,6 +15,7 @@ export class LoginService{
   initialized: boolean = false
 
   authEndpoint: string = "http://localhost:8080/api/auth/login"
+  loggedEndpoint: string = "http://localhost:8080/api/user"
   context = {context: new HttpContext().set(BYPASS_AUTH, true)}
 
   isLoggedIn: boolean = false
@@ -40,28 +41,28 @@ export class LoginService{
       this.httpClient.post<{token: string}>(this.authEndpoint, userData, this.context)
       .subscribe(data => {
         let isSet: boolean = false
-        let tmpUsr = new User(
-          username!, "", "", "", Gender.Male
-        )
-        this.loggedUser$.next(tmpUsr)
         this.onLogIn.emit(data.token)
-        isSet = true
+        this.httpClient.get<User>(this.loggedEndpoint).subscribe(user => {
+          user.profileImg = "/assets/defaultAvatar.png"
+          this.loggedUser$.next(user)
+          isSet = true
+        })
         return isSet
     })
     }
   }
 
-  login(user: UserData) {
-    this.httpClient.post<{token: string}>(this.authEndpoint, {username: user.username, password: user.password}, this.context)
+  login(userData: UserData) {
+    this.httpClient.post<{token: string}>(this.authEndpoint, {username: userData.username, password: userData.password}, this.context)
       .subscribe(data => {
-        localStorage.setItem('username', user.username)
-        localStorage.setItem('password', user.password)
-        this.router.navigate(["/"])
-        let tmpUsr = new User(
-          user.username!, "", "", ""
-        )
-        this.loggedUser$.next(tmpUsr)
+        localStorage.setItem('username', userData.username)
+        localStorage.setItem('password', userData.password)
         this.onLogIn.emit(data.token)
+        this.httpClient.get<User>(this.loggedEndpoint).subscribe(user => {
+          user.profileImg = "/assets/defaultAvatar.png"
+          this.loggedUser$.next(user)
+          this.router.navigate(["/"])
+        })
       })
   }
 

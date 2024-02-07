@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { CstErrorStateMatcher } from 'src/app/classes/cst-error-state-matcher';
 import { RegisterData } from 'src/app/classes/register-data';
-import { User } from 'src/app/classes/user';
 import { RegisterService } from 'src/app/services/register.service';
 
 @Component({

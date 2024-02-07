@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { User } from 'src/app/classes/user';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
@@ -54,7 +54,7 @@ import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
   ]
 })
 export class TallyComponent{
-
+  
   @Input()
   user!: User;
 

@@ -1,8 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Gender } from 'src/app/enums/gender';
 import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
 import { GamePlatform } from 'src/app/interfaces/gamePlatform';
 import { User } from 'src/app/classes/user';
+import { SearchContainerService } from 'src/app/services/search-container.service';
+import { Game } from 'src/app/interfaces/game';
+import { UsersService } from 'src/app/services/users.service';
+import { filter, map } from 'rxjs';
+import { Router } from '@angular/router';
 
 let steam: GamePlatform = {
   name: "Steam",
@@ -20,10 +25,9 @@ let epic: GamePlatform = {
   styleUrls: ['./swipe-view.component.scss']
 })
 export class SwipeViewComponent implements OnInit {
-  @Input()
-  nameOfGame: string = "Sid Meier's Civilization V"
 
-
+  gamesToSearchBy: Game[] = []
+  users: User[] = []
   currentUserId: number = 0
 
   previousUser!: User
@@ -31,30 +35,66 @@ export class SwipeViewComponent implements OnInit {
 
   tallyState: TallyAnimationState = TallyAnimationState.inPlace
 
+  constructor(
+    private gamesSrv: SearchContainerService,
+    private userSrv: UsersService,
+    private router: Router
+  ) {}
+
   ngOnInit(): void {
-      this.previousUser = this.getPrevUser()
-      this.nextUser = this.getNextUser()
+      this.previousUser = this.getPrevGamer()
+      this.nextUser = this.getNextGamer()
+      this.gamesToSearchBy = this.gamesSrv.selectedGames
+      if(this.gamesToSearchBy.length < 1)
+      {
+        this.router.navigate(['/'])
+        return
+      }
+      this.userSrv.getGamers().pipe(
+        map(users => {
+          users.forEach(gamer => {
+            let user: User = gamer
+            console.log(user)
+            user.username = gamer.nickname
+            this.users.push(user)
+          })          
+          return users
+        }),
+        filter(gamers => {
+            console.log("pre-filter gamers: ", gamers)
+            gamers.filter(gamer => {
+                    if (gamer === null)
+                      return false
+                    return gamer.checkIfContainsGames(this.gamesToSearchBy)
+                })
+              console.log("post-filter gamers: ", gamers)
+              return true
+            })
+          ).subscribe(gamers => {
+            this.users = gamers
+            console.log(this.users[this.currentUserId])
+          })    
   }
   
-  onNextClick(){
+  onNextClick(): void{
     this.tallyState = TallyAnimationState.fadeOutToLeft
   }
 
-  onPrevClick(){
+  onPrevClick(): void{
     this.tallyState = TallyAnimationState.fadeOutToRight
   }
 
-  onRejected(user: User){
+  onRejected(user: User): void{
     this.tallyState = TallyAnimationState.fadeOutToBottom
   }
 
-  progressAnimation(prevState: TallyAnimationState){
+  progressAnimation(prevState: TallyAnimationState): void{
     switch(prevState){
       case TallyAnimationState.fadeOutToLeft:
         this.tallyState = TallyAnimationState.snapRight
         break
       case TallyAnimationState.snapRight:
-        this.incrementUserId();
+        this.incrementGamerId();
         this.tallyState = TallyAnimationState.fadeIn
         break
       case TallyAnimationState.fadeIn:
@@ -64,7 +104,7 @@ export class SwipeViewComponent implements OnInit {
         this.tallyState = TallyAnimationState.snapLeft
         break
       case TallyAnimationState.snapLeft:
-        this.decrementUserId();
+        this.decrementGamerId();
         this.tallyState = TallyAnimationState.fadeIn
         break
       case TallyAnimationState.fadeOutToBottom:
@@ -73,107 +113,107 @@ export class SwipeViewComponent implements OnInit {
     }
   }
 
-  incrementUserId(){
+  incrementGamerId(): void{
     if(++this.currentUserId > this.users.length - 1)
       this.currentUserId = 0
-    this.previousUser = this.getPrevUser()
-    this.nextUser = this.getNextUser()
+    this.previousUser = this.getPrevGamer()
+    this.nextUser = this.getNextGamer()
   }
 
-  decrementUserId(){
+  decrementGamerId(): void{
     if(--this.currentUserId < 0)
       this.currentUserId = this.users.length - 1
-    this.previousUser = this.getPrevUser()
-    this.nextUser = this.getNextUser()
+    this.previousUser = this.getPrevGamer()
+    this.nextUser = this.getNextGamer()
   }
 
-  getNextUser(): User {
+  getNextGamer(): User {
     return this.currentUserId + 1 > this.users.length - 1 ?
       this.users[0] : this.users[this.currentUserId + 1]
   }
 
-  getPrevUser(): User {
+  getPrevGamer(): User {
     return this.currentUserId - 1 < 0 ?
       this.users[this.users.length - 1] : this.users[this.currentUserId - 1]
   }
 
- users: User[] = [
-  {
-    name: "Mahatma",
-    lastName: "Gandhi",
-    nickName: "BigG",
-    description: "I want to play Civ ad destroy my enemies with nuclear fire!!!",
-    email: "mgandhi@killemwithnukes.in",
-    profileImg: "assets/profile.png",
-    gender: Gender.Male,
-    isIncel: true,
-    platformUser: [{
-      nick: "BigGWithDemNukesToBurmSuckaz",
-      profileImgSourse: "src/assets/profile.png",
-      platform: steam
-    },
-      {
-      nick: "BigG",
-      profileImgSourse: "src/assets/profile.png",
-      platform: epic
-    }
-    ]
-  },
-  {
-    name: "Theresa",
-    lastName: "Bojaxhiu",
-    nickName: "MommaPain",
-    description: "Suffer 4 Gawd!",
-    email: "theresamommy@letemsuffer.in",
-    profileImg: "assets/profile2.png",
-    gender: Gender.Female,
-    isIncel: true,
-    platformUser: [{
-      nick: "MommaPain",
-      profileImgSourse: "src/assets/profile2.png",
-      platform: steam},
-      {
-      nick: "MommaPain",
-      profileImgSourse: "src/assets/profile2.png",
-      platform: epic}
-    ]},
-    {
-      name: "Alexandros",
-      lastName: "O Megas",
-      nickName: "AlphaAlex",
-      description: "Let's conquer the world together!",
-      email: "oMegasAlexandros@worldconqueror.gr",
-      profileImg: "https://images.unsplash.com/photo-1641563127349-c9d58bc9847d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxleGFuZGVyJTIwdGhlJTIwZ3JlYXR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-      gender: Gender.Male,
-      isIncel: false,
-      platformUser: [{
-        nick: "AlphaAlex",
-        profileImgSourse: "https://images.unsplash.com/photo-1641563127349-c9d58bc9847d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxleGFuZGVyJTIwdGhlJTIwZ3JlYXR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-        platform: steam},
-        {
-        nick: "AlphaAlex",
-        profileImgSourse: "https://images.unsplash.com/photo-1641563127349-c9d58bc9847d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxleGFuZGVyJTIwdGhlJTIwZ3JlYXR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-        platform: epic}
-      ]},
-      {
-        name: "Imhotep",
-        lastName: "",
-        nickName: "MegaImho",
-        description: "Building better world",
-        email: "imhotep@pyramids.eg",
-        profileImg: "https://images.unsplash.com/photo-1695901742041-5b56f69b17a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1ob3RlcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-        gender: Gender.Male,
-        isIncel: false,
-        platformUser: [{
-          nick: "MegaImho",
-          profileImgSourse: "https://images.unsplash.com/photo-1695901742041-5b56f69b17a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1ob3RlcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-          platform: steam},
-          {
-          nick: "ImhoMega",
-          profileImgSourse: "https://images.unsplash.com/photo-1695901742041-5b56f69b17a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1ob3RlcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-          platform: epic}
-        ]}
-]
+//  users2: User[] = [
+//   {
+//     name: "Mahatma",
+//     lastName: "Gandhi",
+//     nickName: "BigG",
+//     description: "I want to play Civ ad destroy my enemies with nuclear fire!!!",
+//     email: "mgandhi@killemwithnukes.in",
+//     profileImg: "assets/profile.png",
+//     gender: Gender.Male,
+//     isIncel: true,
+//     platformUser: [{
+//       nick: "BigGWithDemNukesToBurmSuckaz",
+//       profileImgSourse: "src/assets/profile.png",
+//       platform: steam
+//     },
+//       {
+//       nick: "BigG",
+//       profileImgSourse: "src/assets/profile.png",
+//       platform: epic
+//     }
+//     ]
+//   },
+//   {
+//     name: "Theresa",
+//     lastName: "Bojaxhiu",
+//     nickName: "MommaPain",
+//     description: "Suffer 4 Gawd!",
+//     email: "theresamommy@letemsuffer.in",
+//     profileImg: "assets/profile2.png",
+//     gender: Gender.Female,
+//     isIncel: true,
+//     platformUser: [{
+//       nick: "MommaPain",
+//       profileImgSourse: "src/assets/profile2.png",
+//       platform: steam},
+//       {
+//       nick: "MommaPain",
+//       profileImgSourse: "src/assets/profile2.png",
+//       platform: epic}
+//     ]},
+//     {
+//       name: "Alexandros",
+//       lastName: "O Megas",
+//       nickName: "AlphaAlex",
+//       description: "Let's conquer the world together!",
+//       email: "oMegasAlexandros@worldconqueror.gr",
+//       profileImg: "https://images.unsplash.com/photo-1641563127349-c9d58bc9847d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxleGFuZGVyJTIwdGhlJTIwZ3JlYXR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+//       gender: Gender.Male,
+//       isIncel: false,
+//       platformUser: [{
+//         nick: "AlphaAlex",
+//         profileImgSourse: "https://images.unsplash.com/photo-1641563127349-c9d58bc9847d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxleGFuZGVyJTIwdGhlJTIwZ3JlYXR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+//         platform: steam},
+//         {
+//         nick: "AlphaAlex",
+//         profileImgSourse: "https://images.unsplash.com/photo-1641563127349-c9d58bc9847d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWxleGFuZGVyJTIwdGhlJTIwZ3JlYXR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
+//         platform: epic}
+//       ]},
+//       {
+//         name: "Imhotep",
+//         lastName: "",
+//         nickName: "MegaImho",
+//         description: "Building better world",
+//         email: "imhotep@pyramids.eg",
+//         profileImg: "https://images.unsplash.com/photo-1695901742041-5b56f69b17a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1ob3RlcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+//         gender: Gender.Male,
+//         isIncel: false,
+//         platformUser: [{
+//           nick: "MegaImho",
+//           profileImgSourse: "https://images.unsplash.com/photo-1695901742041-5b56f69b17a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1ob3RlcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+//           platform: steam},
+//           {
+//           nick: "ImhoMega",
+//           profileImgSourse: "https://images.unsplash.com/photo-1695901742041-5b56f69b17a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1ob3RlcHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+//           platform: epic}
+//         ]}
+// ]
 
 
 }

@@ -1,6 +1,8 @@
 <h2>Searching for players of: 
     <br>
-    {{ nameOfGame }}
+    @for (game of gamesToSearchBy; track $index) {
+        <p>{{ game.name }}</p>
+    }
 </h2>
 
 <div class="tally-with-buttons">

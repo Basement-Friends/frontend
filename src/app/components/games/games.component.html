@@ -33,7 +33,7 @@
                         (optionSelected)="selectGame($event.option.value)"
                         >
                     @for(option of filteredOptions; track option){
-                        <mat-option [value]="option" >{{ option.name }}</mat-option>
+                        <mat-option [value]="option" >{{ option }}</mat-option>
                     }
                     </mat-autocomplete>
                 </mat-form-field>
