@@ -57,7 +57,6 @@ export class UserDashboardComponent implements OnInit {
       map(currentUser => {
         if(currentUser !== undefined && currentUser !== null)
           this.loggedUser = currentUser
-        console.log("crtUser: ", this.loggedUser?.username)
       })
     ).subscribe()
   }

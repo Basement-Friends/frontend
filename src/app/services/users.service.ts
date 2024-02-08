@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Gamer } from '../classes/gamer';
 import { User } from '../classes/user';
 import { Observable } from 'rxjs';
 
@@ -20,7 +19,7 @@ export class UsersService {
     return this.http.get<User[]>(this.userUrl)
   }
 
-  getGamers(): Observable<any[]>{
-    return this.http.get<any[]>(this.gamerUrl)
+  getGamers(): Observable<User[]>{
+    return this.http.get<User[]>(this.gamerUrl)
   }
 }

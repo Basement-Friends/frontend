@@ -8,6 +8,8 @@ import { Game } from 'src/app/interfaces/game';
 import { UsersService } from 'src/app/services/users.service';
 import { filter, map } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { LoginService } from 'src/app/services/login.service';
 
 let steam: GamePlatform = {
   name: "Steam",
@@ -25,8 +27,9 @@ let epic: GamePlatform = {
   styleUrls: ['./swipe-view.component.scss']
 })
 export class SwipeViewComponent implements OnInit {
-
+  loggedUser: User | null = null
   gamesToSearchBy: Game[] = []
+  preferedGender: Gender | null = null
   users: User[] = []
   currentUserId: number = 0
 
@@ -38,44 +41,60 @@ export class SwipeViewComponent implements OnInit {
   constructor(
     private gamesSrv: SearchContainerService,
     private userSrv: UsersService,
+    private loginSrv: LoginService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-      this.previousUser = this.getPrevGamer()
-      this.nextUser = this.getNextGamer()
-      this.gamesToSearchBy = this.gamesSrv.selectedGames
+      this.setupValues();
       if(this.gamesToSearchBy.length < 1)
       {
         this.router.navigate(['/'])
         return
       }
       this.userSrv.getGamers().pipe(
-        map(users => {
-          users.forEach(gamer => {
-            let user: User = gamer
-            console.log(user)
-            user.username = gamer.nickname
-            this.users.push(user)
-          })          
-          return users
-        }),
-        filter(gamers => {
-            console.log("pre-filter gamers: ", gamers)
-            gamers.filter(gamer => {
-                    if (gamer === null)
-                      return false
-                    return gamer.checkIfContainsGames(this.gamesToSearchBy)
-                })
-              console.log("post-filter gamers: ", gamers)
-              return true
-            })
-          ).subscribe(gamers => {
-            this.users = gamers
-            console.log(this.users[this.currentUserId])
-          })    
+        map(users => { 
+          users.forEach((user: User) => {
+            let newUser: User = new User()
+            newUser.copy(user)
+            if(newUser.checkIfContainsGames(this.gamesToSearchBy))
+              this.users.push(newUser)
+          })
+          this.filterUsersByPreferences(this.preferedGender)
+          return this.users     
+        }))
+        .subscribe(users => this.users = users)
   }
   
+  private setupValues() {
+    this.previousUser = this.getPrevGamer();
+    this.nextUser = this.getNextGamer();
+    this.preferedGender = this.gamesSrv.selectedGender
+    this.gamesToSearchBy = this.gamesSrv.selectedGames;
+
+    this.loginSrv.loggedUser$.pipe(
+      filter(currentUser => currentUser !== undefined),
+      ).subscribe((user?: User | null) => {
+        if (user !== null && user !== undefined)
+          this.loggedUser = user;
+        this.users = this.users.filter(user => {
+          return user.nickname !== this.loggedUser?.nickname
+        })
+    })
+  }
+
+  private filterUsersByPreferences(preferedGender: Gender | null = null) {
+    this.users = this.users.filter(user => {
+      if(user.nickname === this.loggedUser?.nickname)
+        return false
+      if (user === null)
+        return false;
+      if (user.gender !== preferedGender && preferedGender !== null)
+        return false;
+      return true
+    })
+  }
+
   onNextClick(): void{
     this.tallyState = TallyAnimationState.fadeOutToLeft
   }
@@ -84,8 +103,9 @@ export class SwipeViewComponent implements OnInit {
     this.tallyState = TallyAnimationState.fadeOutToRight
   }
 
-  onRejected(user: User): void{
+  onRejected(remUser: User): void{
     this.tallyState = TallyAnimationState.fadeOutToBottom
+    this.users = this.users.filter(user => user !== remUser)
   }
 
   progressAnimation(prevState: TallyAnimationState): void{

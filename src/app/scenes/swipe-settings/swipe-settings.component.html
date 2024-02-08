@@ -3,7 +3,7 @@
         Looking for:
         <form (submit)="startSwiping()" [formGroup]="searchSettingsForm">
             <mat-label>Gender:</mat-label>
-            <mat-radio-group formControlName="gender">
+            <mat-radio-group formControlName="gender" [(ngModel)]="selectedGender">
                 @for(gender of genders; track gender){
                     <mat-radio-button [value]="gender">
                         {{ gender }}

@@ -54,7 +54,7 @@ import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
   ]
 })
 export class TallyComponent{
-  
+
   @Input()
   user!: User;
 

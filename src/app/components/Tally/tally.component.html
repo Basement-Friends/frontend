@@ -24,7 +24,7 @@
 
     <mat-card class="user-card">
         <mat-card-header>
-            {{ user.username }}
+            {{ user.nickname }}
         </mat-card-header>
         <mat-card-header *ngIf="user.isIncel === true">
             <div class="incel-warning" [ngSwitch]="user.gender">

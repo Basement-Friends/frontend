@@ -5,14 +5,20 @@
     }
 </h2>
 
-<div class="tally-with-buttons">
-    <button mat-fab (click)="onPrevClick()">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-    </button>
-    <div class="tallies">
-        <app-tally [user]="users[currentUserId]" [state]="tallyState" (animationEnded)="progressAnimation($event)" (rejected)="onRejected($event)"></app-tally>
+@if(users.length === 0){
+    <h2>Unfortunately, no one matches your preferences for now :/</h2>
+}
+@else {
+
+    <div class="tally-with-buttons">
+        <button mat-fab (click)="onPrevClick()">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <div class="tallies">
+            <app-tally [user]="users[currentUserId]" [state]="tallyState" (animationEnded)="progressAnimation($event)" (rejected)="onRejected($event)"></app-tally>
+        </div>
+        <button mat-fab (click)="onNextClick()">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
     </div>
-    <button mat-fab (click)="onNextClick()">
-        <mat-icon>keyboard_arrow_right</mat-icon>
-    </button>
-</div>
+}

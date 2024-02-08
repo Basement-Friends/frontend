@@ -17,81 +17,88 @@ export class SwipeSettingsComponent implements OnInit {
   
   games: Game[] = []
   private _selectedGames: Game[] = []
-  get selectedGames(): Game[] {
-    return this._selectedGames
-  }
-  set selectedGames(games: Game[]){
-    this._selectedGames = games
-  }
-
+  
   filteredOptions: Game[] = []
-
-  selectedGender: Gender | null = null
+  
+  _selectedGender: Gender | null = null
   genders: string[] = Object.values(Gender);
-
+  
   searchSettingsForm: FormGroup = new FormGroup({
     gender: new FormControl(null),
     games: new FormArray([])
   })
-  get gameForms() {
+  get gameForm() {
     return this.searchSettingsForm.get('games') as FormArray
   }
 
+  get selectedGender(){
+    return this.searchSettingsForm.get('gender')?.value
+  }
+  set selectedGender(gender: Gender | null){
+    this._selectedGender = gender
+  }
+  
   constructor(
     private gamesService: SearchContainerService,
     private router: Router,
     private fb: FormBuilder,
     private userService: UsersService,
-  ){}
-  
-  ngOnInit() {
-    this.gamesService.getGames().subscribe( games => {
-      this.games.push(...games)
-    })
-    this.searchSettingsForm.valueChanges.subscribe(this.updateSettings)
-  }
-
-  updateSettings(e: any) {
-    this.selectedGender = e.gender
-    if(e.game !== null)
+    ){}
+    
+    ngOnInit() {
+      this.gamesService.getGames().subscribe( games => {
+        this.games.push(...games)
+      })
+      this.searchSettingsForm.valueChanges.subscribe(this.updateSettings)
+    }
+    
+    updateSettings(e: any) {
+      this.selectedGender = e.gender
+      if(e.game !== null)
       this._selectedGames.push(e.game)
   }
-
+  
   addGame(game: Game) {
     const _game = this.fb.group({
       id: game.id,
       name: game.name
     })
-    console.log(this.gameForms)
-    let gf = this.gameForms
-    this.gameForms?.push(_game)
+    this.gameForm?.push(_game)
     this.selectedGames.push(game)
   }
-
+  
   deleteGame(i: number) {
-    this.gameForms.removeAt(i)
+    this.gameForm.removeAt(i)
   }
-
+  
   displayGame(game: Game) {
     return game && game.name ? game.name : ''
   }
-
+  
   startSwiping() {
     this.userService.getUsers()
     if(this.selectedGames?.length === 0) {
       alert("Please select game(s)!")
       return
     }
+    this.gamesService.selectedGender = this.selectedGender
     this.gamesService.selectedGames = this.selectedGames
     this.router.navigate(["/swiping"])
   }
-
+  
   filter() {
     const filterValue: string = this.input.nativeElement.value.toLowerCase()
     this.filteredOptions = this.games.filter(game => game.name.toLowerCase().includes(filterValue))
   }
-
+  
   selected(e: Game) {
     this.addGame(e)
+  }
+  
+  get selectedGames(): Game[] {
+    return this._selectedGames
+  }
+  set selectedGames(games: Game[]){
+    this._selectedGames = games
   }
 }
