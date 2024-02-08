@@ -54,6 +54,7 @@ export class SwipeViewComponent implements OnInit {
       }
       this.userSrv.getGamers().pipe(
         map(users => { 
+          console.log(users);
           users.forEach((user: User) => {
             let newUser: User = new User()
             newUser.copy(user)
@@ -85,7 +86,8 @@ export class SwipeViewComponent implements OnInit {
 
   private filterUsersByPreferences(preferedGender: Gender | null = null) {
     this.users = this.users.filter(user => {
-      if(user.nickname === this.loggedUser?.nickname)
+      console.log(user.nickname, this.loggedUser?.nickname, user.nickname === this.loggedUser?.nickname);
+      if(user.nickname === this.loggedUser?.username)
         return false
       if (user === null)
         return false;

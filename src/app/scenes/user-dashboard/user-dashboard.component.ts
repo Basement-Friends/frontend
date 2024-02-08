@@ -30,7 +30,7 @@ export class UserDashboardComponent implements OnInit {
     newPasswordRepeat: new FormControl('', [Validators.required])
   },
   {
-  validators: this.matchPasswords
+    validators: this.matchPasswords
   })
 
   get oldPassword() {

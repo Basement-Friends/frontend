@@ -65,7 +65,7 @@ export class TallyComponent{
   animationEnded = new EventEmitter<TallyAnimationState>()
 
   @Output()
-  rejected = new EventEmitter<User>()
+  rejected: EventEmitter<User> = new EventEmitter<User>()
 
   onAnimationEnd(s: TallyAnimationState) {
     this.animationEnded.emit(s)

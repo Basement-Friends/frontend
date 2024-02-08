@@ -13,7 +13,7 @@ import { LoginComponent } from './scenes/login/login.component';
 import { SwipeSettingsComponent } from './scenes/swipe-settings/swipe-settings.component';
 import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserDashboardComponent } from './scenes/userDashboard/user-dashboard.component';
+import { UserDashboardComponent } from './scenes/user-dashboard/user-dashboard.component';
 import { RegisterComponent } from './scenes/register/register.component';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { GamesComponent } from './components/games/games.component';

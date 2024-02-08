@@ -1,8 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Game } from 'src/app/interfaces/game';
-import { SearchContainerService } from 'src/app/services/search-container.service';
-import { UsersService } from 'src/app/services/users.service';
+import { GamesService } from 'src/app/services/games.service';
 
 @Component({
   selector: 'app-games',
@@ -10,35 +9,28 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrl: './games.component.scss',
 })
 export class GamesComponent implements OnInit{
-  //@Input()
-  games: Game[] = []
+
+  possibleGames: Game[] = []
+  userGames: Game[] = []
   filteredOptions: Game[] = []
   selectedGame: Game | undefined
   
   @ViewChild('gameInput') gameInput!: ElementRef<HTMLInputElement>
-
-  gameControl = new FormControl('', [Validators.required])
-  
-  step: number = 0;
-  
+  gameControl = new FormControl('', [Validators.required])  
+  step: number = 0;  
   addingGame: boolean = false
   
   constructor(
-    private gamesSrv: SearchContainerService
+    private gamesSrv: GamesService
   ) {}
 
   ngOnInit(): void {
     this.gamesSrv.getGames()
-    .subscribe(games => 
-      {
-        // this.games = games
-        this.games = games
-        console.log("games ", this.games)
-    })
+    .subscribe(games => this.possibleGames = games)
   }
 
   removeGame(id: number) {
-    this.games = this.games.filter(item => item.id !== id)
+    this.userGames = this.userGames.filter(item => item.id !== id)
   }
 
   addGame(){
@@ -55,16 +47,17 @@ export class GamesComponent implements OnInit{
     if(this.selectedGame === undefined || this.selectedGame === null)
       return
     this.addingGame = false
-    this.games.push(this.selectedGame)
+    if(!this.userGames.some(game => this.selectedGame?.name === game.name))
+      this.userGames.push(this.selectedGame)
     this.selectedGame = undefined
+    this.gameInput.nativeElement.value = ""
   }
 
   filterGames(){
     const filterValue = this.gameInput.nativeElement.value.toLowerCase()
-    this.filteredOptions = this.games.filter( game => {
-      console.log(game)
+    this.filteredOptions = this.possibleGames.filter( game => 
       game.name.toLowerCase().includes(filterValue)
-    })
+    )
   }
 
   displayGame(game: Game) {

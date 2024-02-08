@@ -4,7 +4,7 @@ import { HomeComponent } from './scenes/home/home.component';
 import { LoginComponent } from './scenes/login/login.component';
 import { SwipeSettingsComponent } from './scenes/swipe-settings/swipe-settings.component';
 import { LoginGuard } from './guards/login.guard';
-import { UserDashboardComponent } from './scenes/userDashboard/user-dashboard.component';
+import { UserDashboardComponent } from './scenes/user-dashboard/user-dashboard.component';
 import { RegisterComponent } from './scenes/register/register.component';
 
 
