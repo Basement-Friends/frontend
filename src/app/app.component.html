@@ -1,14 +1,31 @@
 <div class="background">
     <mat-toolbar class="navbar" color="primary">
         <div class="navbar-stuff" (click)="backHome()">
+            <img id="logo" src="../assets/logo.png">
             <h3 id="title">
                 BasementFriends
             </h3>
         </div>
         <span></span>
         <div class="user-panel">
-            <app-user-panel></app-user-panel>
+            <app-user-panel (messagesOpen)="drawer.toggle()"></app-user-panel>
         </div>
     </mat-toolbar>
-    <router-outlet></router-outlet>
+
+      <mat-drawer-container class="container" autosize [hasBackdrop]="false">
+        <mat-drawer #drawer class="sidenav" disableClose="true" position="end"  mode="side" disableClose="false" (closed)="nestedDrawer.close()">
+            <app-chats-list (chatOpened)="chatSelected($event)"></app-chats-list>
+        </mat-drawer>  
+        <mat-drawer-content>
+            <mat-drawer-container class="nested-container" [hasBackdrop]="false">
+                <mat-drawer #nestedDrawer id="nested-sidenav" mode="over" position="end" disableClose="false">
+                    <app-chat [data]="selectedChatData"></app-chat>
+                </mat-drawer> 
+                <mat-drawer-content>
+                    <router-outlet></router-outlet>
+                </mat-drawer-content>                   
+            </mat-drawer-container>              
+        </mat-drawer-content>
+    </mat-drawer-container>
+
 </div>

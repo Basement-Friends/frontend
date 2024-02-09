@@ -7,7 +7,7 @@ span {
     background: #060606;
     border-width: 1px;
     border-color: #272727;
-    height: 5vmax;
+    height: 8vh;
 }
 
 .navbar-stuff {
@@ -23,10 +23,39 @@ span {
     font-size: xx-large;
 }
 
-.background {
-    width: 100%;
+#logo {
+    max-height: 30px;
     height: 100%;
+}
+
+.background {
+    width: 100vw;
+    height: 100vh;
     background: linear-gradient(180deg, #06010d 0%, #2d004b 47.53%, #06010d 100%);
     background-blend-mode: normal;
+}
+
+.container {
+    width: 100%;
+    height: 92vh;
+    background: #00000000;
+    .nested-container {
+        background-color: transparent;       
+    }
+}
+
+.sidenav {
+    height: 100%;
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // * {
+    //     width: 75%;
+    //     margin-left: 5%;
+    // }
+    // #nested-sidenav {
+    //     margin-left: 20vw;
+    // }
 }
   

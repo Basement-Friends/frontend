@@ -32,10 +32,21 @@
                         [displayWith]="displayGame"
                         (optionSelected)="selectGame($event.option.value)"
                         >
-                    @for(option of filteredOptions; track option){
-                        <mat-option [value]="option" >{{ option.name }}</mat-option>
-                    }
+                        @for(option of filteredOptions; track option){
+                            <mat-option [value]="option" >{{ option.name }}</mat-option>
+                        }
                     </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <input 
+                        #description
+                        placeholder="Description"
+                        matInput
+                        [formControl]="descriptionControll"
+                        (focus)="editDescription()"
+                        (input)="editDescription()"
+                    >
                 </mat-form-field>
                 <button mat-button type="submit">Add</button>
             </form>

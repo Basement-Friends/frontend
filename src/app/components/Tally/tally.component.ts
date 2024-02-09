@@ -67,8 +67,15 @@ export class TallyComponent{
   @Output()
   rejected: EventEmitter<User> = new EventEmitter<User>()
 
+  @Output()
+  startedChat: EventEmitter<User> = new EventEmitter<User>()
+
   onAnimationEnd(s: TallyAnimationState) {
     this.animationEnded.emit(s)
+  }
+
+  onStartedChat() {
+    this.startedChat.emit(this.user)
   }
 
   onRejected() {

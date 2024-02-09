@@ -1,0 +1,12 @@
+<div class="wrapper">
+    <h2 class="header">Your DM's</h2>
+    
+    <div class="chats">
+        @for (chat of chats; track $index) {
+            <div (click)="select(chat)">
+                {{ chat.name }}
+            </div>
+        }
+    </div>
+    
+</div>

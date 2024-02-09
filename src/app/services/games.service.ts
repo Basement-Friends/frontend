@@ -9,6 +9,7 @@ import { Game } from '../interfaces/game';
 export class GamesService {
 
   gamesUrl: string = "http://localhost:8080/api/game/all"
+  gamersUrl: string = "http://localhost:8080/api/gamer"
 
   constructor(
     private http: HttpClient
@@ -16,5 +17,9 @@ export class GamesService {
 
   getGames(): Observable<Game[]>{
     return this.http.get<Game[]>(this.gamesUrl)
+  }
+
+  addGame(newGame: Game) {
+    this.http.put(this.gamersUrl + "/updateProfile", { game: newGame.name, gameStartDate: newGame.gameStartDate, additionalInformation: newGame.additionalInformation})
   }
 }

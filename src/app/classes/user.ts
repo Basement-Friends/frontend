@@ -7,12 +7,18 @@ export class User {
     name: string | undefined
     lastName: string | undefined
     private _username: string | undefined
-    get username(): string | undefined { return this._username }
+    get username(): string | undefined { 
+        if(this._username === undefined && this.nickname !== undefined)
+            return this.nickname
+        if(this._username !== undefined && this.nickname === undefined)
+            return this._username
+        return this._username
+     }
     set username(nUsername: string) { 
         this._username = nUsername 
         this.nickname = nUsername
     }
-    nickname: string | undefined
+    private nickname: string | undefined
     description: string | undefined
     email: string | undefined
     profileImg: string = "/assets/defaultAvatar.png"

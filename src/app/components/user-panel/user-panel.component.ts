@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { filter, map, tap } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { User } from 'src/app/classes/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { LoginService } from 'src/app/services/login.service';
@@ -11,6 +11,8 @@ import { LoginService } from 'src/app/services/login.service';
   styleUrls: ['./user-panel.component.scss']
 })
 export class UserPanelComponent implements OnInit {
+
+  @Output() messagesOpen: EventEmitter<void> = new EventEmitter<void>()
 
   private _isLoggedIn: boolean = false
   get isLoggedIn(){ return this._isLoggedIn }
@@ -55,5 +57,9 @@ export class UserPanelComponent implements OnInit {
 
   register(){
     this.router.navigate(['/register'])
+  }
+
+  openMessages(){
+    this.messagesOpen.emit()
   }
 }

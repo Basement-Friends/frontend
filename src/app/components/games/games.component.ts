@@ -14,9 +14,12 @@ export class GamesComponent implements OnInit{
   userGames: Game[] = []
   filteredOptions: Game[] = []
   selectedGame: Game | undefined
+  gameDescription: string = ""
   
   @ViewChild('gameInput') gameInput!: ElementRef<HTMLInputElement>
+  @ViewChild('description') description!: ElementRef<HTMLInputElement>
   gameControl = new FormControl('', [Validators.required])  
+  descriptionControll = new FormControl('')  
   step: number = 0;  
   addingGame: boolean = false
   
@@ -48,7 +51,10 @@ export class GamesComponent implements OnInit{
       return
     this.addingGame = false
     if(!this.userGames.some(game => this.selectedGame?.name === game.name))
+    {
       this.userGames.push(this.selectedGame)
+      this.gamesSrv.addGame(this.selectedGame)
+    }
     this.selectedGame = undefined
     this.gameInput.nativeElement.value = ""
   }
@@ -58,6 +64,10 @@ export class GamesComponent implements OnInit{
     this.filteredOptions = this.possibleGames.filter( game => 
       game.name.toLowerCase().includes(filterValue)
     )
+  }
+
+  editDescription(){
+    this.gameDescription = this.description.nativeElement.value
   }
 
   displayGame(game: Game) {

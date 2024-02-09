@@ -2,6 +2,12 @@
     display: flex;
     max-height: 100%;
     gap: 30px;
+
+    * {
+        aspect-ratio: 1;
+        max-height: 40px;
+        font-size: 100%;
+    }
 }
 
 .profile-img {
@@ -9,11 +15,10 @@
 }
 
 img {
-    max-height: 20px;    
-    aspect-ratio: 1 / 1;
     cursor: pointer;
 }
 
 button {
     background-color: #1e0072;
+    height: 100%;
 }

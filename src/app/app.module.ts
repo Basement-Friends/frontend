@@ -11,12 +11,19 @@ import { TallyComponent } from './components/tally/tally.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './scenes/login/login.component';
 import { SwipeSettingsComponent } from './scenes/swipe-settings/swipe-settings.component';
-import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClientModule,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserDashboardComponent } from './scenes/user-dashboard/user-dashboard.component';
 import { RegisterComponent } from './scenes/register/register.component';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { GamesComponent } from './components/games/games.component';
+import { ChatsListComponent } from './components/chats-list/chats-list.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +36,9 @@ import { GamesComponent } from './components/games/games.component';
     SwipeSettingsComponent,
     UserDashboardComponent,
     RegisterComponent,
-    GamesComponent
+    GamesComponent,
+    ChatsListComponent,
+    ChatComponent,
   ],
   imports: [
     HttpClientModule,
@@ -40,9 +49,7 @@ import { GamesComponent } from './components/games/games.component';
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
   ],
-  providers: [
-    provideHttpClient(withInterceptors([authInterceptor])),
-  ],
+  providers: [provideHttpClient(withInterceptors([authInterceptor]))],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,7 +1,11 @@
 <div class="content">
     <ng-container *ngIf="user !== undefined && user !== null; else loginButton">
-        <mat-icon fontIcon="menu"></mat-icon>
-        <mat-icon fontIcon="email"></mat-icon>
+        <button mat-button>
+            <mat-icon fontIcon="menu"></mat-icon>
+        </button>
+        <button mat-button (click)="openMessages()">
+            <mat-icon fontIcon="email"></mat-icon>
+        </button>
         <img (click)="toDashboard()" src="{{user.profileImg}}">    
     </ng-container>
     <ng-template #loginButton>
