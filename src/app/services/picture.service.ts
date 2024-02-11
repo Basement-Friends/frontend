@@ -7,17 +7,22 @@ import { catchError, throwError } from 'rxjs';
 })
 export class PictureService {
 
-  private url: string = "http://localhost:8080/api/picture/upload"
+  private url: string = "http://localhost:8080/api/picture"
 
   private constructor(
     private http: HttpClient
   ) { }
 
+  getPicture(){
+    console.log("getting pic");
+    return this.http.get(`${this.url}/view`, {responseType: 'blob'})
+  }
+
   uploadPicture(file: File){
     let payload = new FormData();
     payload.append('file', file)
     console.log(payload);
-    this.http.post(this.url, payload)
+    this.http.post(`${this.url}/upload`, payload)
       .pipe(
         catchError(this.handleError)
       )

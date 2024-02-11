@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { UserData } from '../classes/user-data';
 import { User } from '../classes/user';
 import { BYPASS_AUTH } from '../interceptors/auth.interceptor';
+import { PictureService } from './picture.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class LoginService{
 
   constructor(
     private httpClient: HttpClient,
+    private pictureSrv: PictureService,
     private router: Router
   ) { 
   }
@@ -41,13 +43,23 @@ export class LoginService{
         let isSet: boolean = false
         this.token$.next(data.token)
         this.httpClient.get<User>(this.loggedEndpoint).subscribe(user => {
-          user.profileImg = "/assets/defaultAvatar.png"
+          this.loadProfileImg(user)
+
+          // user.profileImg = "/assets/defaultAvatar.png"
           this.loggedUser$.next(user)
           isSet = true
         })
         return isSet
     })
     }
+  }
+
+  private loadProfileImg(user: User) {
+    this.pictureSrv.getPicture().subscribe(picture => {
+      let blob = new Blob([picture], { type: 'image/jpg' });
+      let url = window.URL.createObjectURL(blob);
+      user.profileImg = url
+    });
   }
 
   login(userData: UserData) {
@@ -58,7 +70,10 @@ export class LoginService{
         localStorage.setItem('password', userData.password)
         this.token$.next(data.token)
         this.httpClient.get<User>(this.loggedEndpoint).subscribe(user => {
-          user.profileImg = "/assets/defaultAvatar.png"
+          this.loadProfileImg(user)
+          // this.pictureSrv.getPicture().subscribe(picture => console.log("picture: ", picture))
+
+          // user.profileImg = "/assets/defaultAvatar.png"
           this.loggedUser$.next(user)
           this.router.navigate(["/"])
         })

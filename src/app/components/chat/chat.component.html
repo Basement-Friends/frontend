@@ -3,9 +3,11 @@
         {{ data.name }}
     </h2>
     @for (message of messages; track $index) {
-        <div class="message-bubble">
-            {{ message.message }}
-        </div>
+        <mat-card class="message-bubble">
+            <mat-card-content>
+                {{ message.message }}
+            </mat-card-content>
+        </mat-card>
         <mat-divider></mat-divider>
     }
     <mat-divider id="final-divider"></mat-divider>
