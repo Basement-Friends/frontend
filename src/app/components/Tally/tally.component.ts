@@ -24,6 +24,10 @@ import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
         opacity: 0,
         transform: 'translateY(100%)'
       })),
+      state(TallyAnimationState.fadeOutToTop, style({
+        opacity: 0,
+        transform: 'translateY(-100%)'
+      })),
       state(TallyAnimationState.snapLeft, style({
         opacity: 0,
         transform: 'translateX(-100%)'
@@ -46,6 +50,7 @@ import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
       transition(`${TallyAnimationState.snapRight} => ${TallyAnimationState.fadeIn}`, animate ('800ms ease-out')),
       transition(`${TallyAnimationState.fadeIn} => ${TallyAnimationState.inPlace}`, animate('0ms')),
       transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToBottom}`, animate('800ms ease-in')),
+      transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToTop}`, animate('800ms ease-in')),
       transition(`${TallyAnimationState.fadeOutToBottom} => ${TallyAnimationState.snapRight}`, animate('0ms')),
       transition(`${TallyAnimationState.inPlace} => ${TallyAnimationState.fadeOutToRight}`, animate ('400ms ease-in')),
       transition(`${TallyAnimationState.fadeOutToRight} => ${TallyAnimationState.snapLeft}`, animate ('0ms')),

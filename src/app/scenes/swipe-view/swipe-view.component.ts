@@ -129,6 +129,7 @@ export class SwipeViewComponent implements OnInit, OnChanges {
     if(this.loggedUser === null || this.loggedUser === undefined)
       return
     console.log(this.loggedUser);
+    this.users = this.users.filter(user => user !== chatttedUser)
     this.chatsSrv.createChat(this.loggedUser, chatttedUser)
   }
 

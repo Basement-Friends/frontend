@@ -4,6 +4,7 @@ export enum TallyAnimationState {
     fadeOutToLeft = "fadeOutToLeft",
     fadeOutToRight = "fadeOutToRight",
     fadeOutToBottom = "fadeOutToBottom",
+    fadeOutToTop = "fadeOutToTop",
     snapRight = "snapRight",
     snapRightFromBottom = "snapRightFromBottom",
     snapLeft = "snapLeft"
