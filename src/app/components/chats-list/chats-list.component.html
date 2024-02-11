@@ -3,7 +3,7 @@
     
     <div class="chats">
         @for (chat of chats; track $index) {
-            <div (click)="select(chat)">
+            <div class="chat" (click)="select(chat)">
                 {{ chat.name }}
             </div>
         }

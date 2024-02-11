@@ -1,10 +1,10 @@
-import { EventEmitter, Injectable } from '@angular/core';
-import { EMPTY, Observable, Subject, catchError, switchAll, tap } from 'rxjs';
-import { WebSocketSubject, webSocket } from 'rxjs/webSocket'
+import { Injectable } from '@angular/core';
+import { catchError, first, throwError } from 'rxjs';
 import { Message } from '../classes/message';
 import { User } from '../classes/user';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChatData } from '../components/chats-list/chats-list.component';
+import { ReceivedMsg } from '../components/chat/chat.component';
 
 export const WS_URL = ""
 
@@ -25,20 +25,39 @@ export class ChatsService {
 
   
   createChat(author: User, receiver: User){
-    console.log(`chat between ${author.username} and ${receiver.username}`);
-    this.http.post(`${this.chatUrl}/create`, { usernames: [author.name, receiver.name]}).subscribe(rv => console.log(rv))
+    console.log(author, receiver);
+    this.http.post(`${this.chatUrl}/create`, { usernames: [author.username, receiver.username]}).subscribe(rv => {
+      console.log(rv)
+      this.getChats();
+    })
   }
   
   getChats() {
     return this.http.get<ChatData[]>(`${this.chatUrl}/myChats`)
   }
 
-  getMessages(chatId: number) {
-    return this.http.get<Message[]>(`${this.chatUrl}/${chatId}`)
+  getMessages(chatId: string) {
+    return this.http.get<ReceivedMsg[]>(`${this.chatUrl}/getMessages/${chatId}`)
   }
 
   sendMessage(msg: Message) {
-    return this.http.post<Message[]>(`${this.chatUrl}/${msg.chatId}`, msg)
+    this.http.post(`${this.chatUrl}/sendMessage/${msg.chatId}`, msg)
+    .pipe(
+      catchError(this.handleError),
+      first()
+    )
+    .subscribe()
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if(error.status === 0) 
+      console.error("An error occurred: ", error.error)
+    else if(error.status === 406)
+      alert("Don't send toxic messages!")
+    else
+      console.error(`Error code ${error.status}, body: `, error.error);
+
+    return throwError(() => new Error("Error occured"))
   }
 
   // public connect(): void {

@@ -4,7 +4,7 @@
     </h2>
     @for (message of messages; track $index) {
         <div class="message-bubble">
-            {{ message.msgText }}
+            {{ message.message }}
         </div>
         <mat-divider></mat-divider>
     }
@@ -13,7 +13,7 @@
         <form (submit)="sendMessage()">
             <mat-form-field>
                 <mat-label>Message</mat-label>
-                <textarea matInput [formControl]="msgControl"></textarea>
+                <textarea #msgTextArea matInput [formControl]="msgControl"></textarea>
             </mat-form-field>
             <button class="send-button" mat-mini-fab color="primary" type="submit">
                 <mat-icon>

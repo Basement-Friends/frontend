@@ -4,7 +4,7 @@ import { ChatsService } from 'src/app/services/chats.service';
 
 
 export class ChatData {
-  chatId: number = -1
+  chatId: string = ""
   name: string = ""
 
   users: User[] = []
@@ -29,7 +29,6 @@ export class ChatsListComponent implements OnInit {
 
   ngOnInit(): void {
       this.chatsSrv.getChats().subscribe(chat => {
-        console.log(chat);
         chat.forEach(chat => this.chats.push(chat))
       })
   }
