@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { filter, map } from 'rxjs';
+import { filter, first, map } from 'rxjs';
 import { User } from 'src/app/classes/user';
 import { LoginService } from 'src/app/services/login.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -13,6 +14,7 @@ import { LoginService } from 'src/app/services/login.service';
 export class UserDashboardComponent implements OnInit {
 
   loggedUser: User | null = null
+  gamer: User | undefined
   isEditing: boolean = false
 
   matchPasswords: ValidatorFn = (group: AbstractControl) => {
@@ -47,17 +49,22 @@ export class UserDashboardComponent implements OnInit {
 
   constructor(
     private loginSrv: LoginService,
+    private usersSrv: UsersService,
     private router: Router
   ){}
 
   ngOnInit(): void {
+    this.usersSrv.getCurrentUserGamer()
+    .pipe(first())
+    .subscribe(gamer => this.gamer = gamer)
+
     this.loginSrv.loggedUser$.pipe(
       filter(currentUser => currentUser !== undefined),
       map(currentUser => {
         if(currentUser !== undefined && currentUser !== null)
           this.loggedUser = currentUser
-      })
-    ).subscribe()
+      }))
+    .subscribe()
   }
 
   toSwiping() {

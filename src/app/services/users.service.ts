@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class UsersService {
 
   userUrl: string = "http://localhost:8080/api/user"
-  gamerUrl: string = "http://localhost:8080/api/gamer/all"
+  gamerUrl: string = "http://localhost:8080/api/gamer"
 
   constructor(
     private http: HttpClient
@@ -20,6 +20,10 @@ export class UsersService {
   }
 
   getGamers(): Observable<User[]>{
-    return this.http.get<User[]>(this.gamerUrl)
+    return this.http.get<User[]>(`${this.gamerUrl}/all`)
+  }
+
+  getCurrentUserGamer(): Observable<User>{
+    return this.http.get<User>(this.gamerUrl)
   }
 }

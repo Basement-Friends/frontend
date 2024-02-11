@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Gender } from 'src/app/enums/gender';
 import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
 import { GamePlatform } from 'src/app/interfaces/gamePlatform';
@@ -6,7 +6,7 @@ import { User } from 'src/app/classes/user';
 import { SearchContainerService } from 'src/app/services/search-container.service';
 import { Game } from 'src/app/interfaces/game';
 import { UsersService } from 'src/app/services/users.service';
-import { filter, map } from 'rxjs';
+import { filter, first, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { ChatsService } from 'src/app/services/chats.service';
@@ -26,12 +26,14 @@ let epic: GamePlatform = {
   templateUrl: './swipe-view.component.html',
   styleUrls: ['./swipe-view.component.scss']
 })
-export class SwipeViewComponent implements OnInit {
+export class SwipeViewComponent implements OnInit, OnChanges {
   loggedUser: User | null = null
   gamesToSearchBy: Game[] = []
   preferedGender: Gender | null = null
   users: User[] = []
   currentUserId: number = 0
+
+  existingChats: string[] = []
 
   previousUser!: User
   nextUser!: User
@@ -46,6 +48,11 @@ export class SwipeViewComponent implements OnInit {
     private router: Router
   ) {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['users'] || changes['existingChats'])
+    console.log(this.users);
+  }
+
   ngOnInit(): void {
       this.setupValues();
       if(this.gamesToSearchBy.length < 1)
@@ -53,20 +60,33 @@ export class SwipeViewComponent implements OnInit {
         this.router.navigate(['/'])
         return
       }
+      this.getDataFromServer()
+    }
+
+    getDataFromServer() {
+      this.chatsSrv.getChats()
+        .pipe(first())
+        .subscribe(chats => chats.forEach(chat => 
+          {
+            this.existingChats.push(chat.name)
+            if(this.users.length > 0)
+              this.users.filter(user => user.username === undefined ? false : this.existingChats.includes(user.username))
+          }          
+        ))        
+
       this.userSrv.getGamers().pipe(
-        map(users => { 
-          console.log(users);
-          users.forEach((user: User) => {
-            let newUser: User = new User()
-            newUser.copy(user)
-            if(newUser.checkIfContainsGames(this.gamesToSearchBy))
-              this.users.push(newUser)
+        map(users => {
+          users.forEach((user: any) => {
+            let newUser: User = new User();
+            newUser.copy(user);
+            if (newUser.checkIfContainsGames(this.gamesToSearchBy) && user.firstName !== undefined && !this.existingChats.includes(user.firstName))
+              this.users.push(newUser);
           })
-          this.filterUsersByPreferences(this.preferedGender)
-          return this.users     
+          this.filterUsersByPreferences(this.preferedGender);
+          return this.users;
         }))
-        .subscribe(users => this.users = users)
-  }
+        .subscribe(users => this.users = users);
+    }
   
   private setupValues() {
     this.previousUser = this.getPrevGamer();

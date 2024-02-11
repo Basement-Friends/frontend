@@ -5,7 +5,7 @@
                 Hello {{ loggedUser.username }}
             </h1>
             <img src="{{loggedUser.profileImg}}">
-            <app-games></app-games>
+            <app-games [user]="gamer"></app-games>
             <button mat-button class="button" color="accent" (click)="toSwiping()">Start swiping!</button>
             <button mat-button class="button" color="accent" (click)="startEditing()">Edit profile</button>
             @if(isEditing === true) {

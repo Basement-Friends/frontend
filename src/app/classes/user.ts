@@ -25,7 +25,7 @@ export class User {
     gender: Gender | undefined
     isIncel: boolean | undefined
     platformUser: {nick: string, profileImgSourse: string, platform: GamePlatform}[] | undefined
-    private gameRecords: UserGameRecord[] = []
+    gameRecords: UserGameRecord[] = []
     private ranks: any[] = []
 
     copy(user: User){

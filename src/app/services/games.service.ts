@@ -21,5 +21,6 @@ export class GamesService {
 
   addGame(newGame: Game) {
     this.http.put(this.gamersUrl + "/updateProfile", { game: newGame.name, gameStartDate: newGame.gameStartDate, additionalInformation: newGame.additionalInformation})
+    .subscribe(e => console.log(e))
   }
 }
