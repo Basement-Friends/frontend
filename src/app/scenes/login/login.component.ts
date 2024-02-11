@@ -24,7 +24,7 @@ export class LoginComponent {
   logIn(){    
     let user = new UserData(this.applyForm.value.username,
       this.applyForm.value.password)
-    this.loginSrv.login(user)
+    this.loginSrv.onLogin(user)
   }
 
   toRegister() {

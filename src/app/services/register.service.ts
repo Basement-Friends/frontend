@@ -28,7 +28,7 @@ export class RegisterService {
         this.onRegister.emit(response.token)
         this.router.navigate(['/'])
         let newUserData: UserData = new UserData(registerData.username, registerData.password)
-        this.loginSrv.login(newUserData)
+        this.loginSrv.onLogin(newUserData)
       })
   }
 

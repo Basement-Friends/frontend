@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
+import { BehaviorSubject, catchError, first, map, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,34 +9,44 @@ export class PictureService {
 
   private url: string = "http://localhost:8080/api/picture"
 
+  img = new BehaviorSubject<Blob>(new Blob())
+
   private constructor(
     private http: HttpClient
   ) { }
 
   getPicture(){
-    console.log("getting pic");
-    return this.http.get(`${this.url}/view`, {responseType: 'blob'})
+    return this.http.get(`${this.url}/view`, {responseType: 'blob'}).pipe(map(res => {
+      this.img.next(res);
+      return res
+      }))
+  }
+
+  updatePicture(){
+    this.http.get(`${this.url}/view`, {responseType: 'blob'}).pipe(
+      first()
+      ).subscribe(res => this.img.next(res))
   }
 
   uploadPicture(file: File){
     let payload = new FormData();
     payload.append('file', file)
-    console.log(payload);
     this.http.post(`${this.url}/upload`, payload)
       .pipe(
-        catchError(this.handleError)
+        catchError(this.handleError.bind(this))
       )
-      .subscribe(ev => console.log(ev))
+      .subscribe(() => this.getPicture())
   }
 
   private handleError(error: HttpErrorResponse) {
     if(error.status === 0) 
       console.error("An error occurred: ", error.error)
+    if(error.status === 404)
+        this.updatePicture()
     else if(error.status === 406)
       alert("Don't send toxic messages!")
     else
       console.error(`Error code ${error.status}, body: `, error.error);
-
     return throwError(() => new Error("Error occured"))
   }
 }

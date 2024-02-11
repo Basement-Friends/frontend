@@ -19,13 +19,11 @@ export class ImageUploaderComponent {
   ) { }
 
   onProfileImgSelected(e: any){
-    console.log(e.target.files);
     if(e.target !== null)
       this.selectedImgFile = e.target.files[0]
   }
 
   uploadImage() {
-    console.log(this.selectedImgFile);
     if(this.selectedImgFile === undefined) {
       alert("Error selecting image, please try again!")
       return
