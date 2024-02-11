@@ -14,14 +14,13 @@ export class LoginService{
 
   initialized: boolean = false
 
-  authEndpoint: string = "http://localhost:8080/api/auth/login"
-  loggedEndpoint: string = "http://localhost:8080/api/user"
+  authUrl: string = "http://localhost:8080/api/auth/login"
+  userUrl: string = "http://localhost:8080/api/user"
   context = {context: new HttpContext().set(BYPASS_AUTH, true)}
 
   isLoggedIn: boolean = false
 
   loggedUser$: BehaviorSubject<User | null | undefined> = new BehaviorSubject<User | null | undefined>(undefined)
-  loggedUser: WritableSignal<User | null | undefined> = signal(undefined)
   token$: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined> (undefined)
 
   constructor(
@@ -58,11 +57,11 @@ export class LoginService{
   }
 
   private logIn(userData: UserData) {
-    this.httpClient.post<{ token: string; }>(this.authEndpoint, userData, this.context)
+    this.httpClient.post<{ token: string; }>(this.authUrl, userData, this.context)
       .subscribe(data => {
         let isSet: boolean = false;
         this.token$.next(data.token);
-        this.httpClient.get<User>(this.loggedEndpoint).subscribe(user => {
+        this.httpClient.get<User>(this.userUrl).subscribe(user => {
           user.profileImg = "/assets/defaultAvatar.png";
           this.loadProfileImg(user);
           this.loggedUser$.next(user);
@@ -85,6 +84,9 @@ export class LoginService{
       });
   }
 
+  changePassword(oldData: {oldPassword: string, newPassword: string, repeatPassword: string}) {
+    return this.httpClient.put(`${this.userUrl}/changePassword`, oldData)
+  }
 
   logout() {
     localStorage.removeItem('username')
@@ -94,6 +96,6 @@ export class LoginService{
   }
 
   getUsers(): Observable<User[]>{
-    return this.httpClient.get<any>(this.authEndpoint)
+    return this.httpClient.get<any>(this.authUrl)
   }
 }

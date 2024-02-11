@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-password-change',
@@ -38,8 +39,16 @@ export class PasswordChangeComponent {
     return this.eidtedUserForm.get('newPasswordRepeat')    
   }
 
-  changePassword(){
+  constructor(
+    private loginSrv: LoginService
+  ){}
 
+  changePassword(){
+    this.loginSrv.changePassword({
+      oldPassword: this.oldPassword?.value,
+      newPassword: this.newPassword?.value, 
+      repeatPassword: this.newPasswordRep?.value
+    })
   }
 
   stopEditing() {
