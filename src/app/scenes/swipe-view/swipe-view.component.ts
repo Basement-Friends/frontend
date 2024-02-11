@@ -8,7 +8,6 @@ import { Game } from 'src/app/interfaces/game';
 import { UsersService } from 'src/app/services/users.service';
 import { filter, map } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
 import { LoginService } from 'src/app/services/login.service';
 import { ChatsService } from 'src/app/services/chats.service';
 
@@ -109,7 +108,7 @@ export class SwipeViewComponent implements OnInit {
   onAccepted(chatttedUser: User) {
     if(this.loggedUser === null || this.loggedUser === undefined)
       return
-    console.log("adding chat");
+    console.log(this.loggedUser);
     this.chatsSrv.createChat(this.loggedUser, chatttedUser)
   }
 

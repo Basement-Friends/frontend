@@ -1,10 +1,9 @@
-import { HttpClient, HttpContext, HttpContextToken } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserData } from '../classes/user-data';
 import { User } from '../classes/user';
-import { Gender } from '../enums/gender';
 import { BYPASS_AUTH } from '../interceptors/auth.interceptor';
 
 @Injectable({
@@ -19,10 +18,9 @@ export class LoginService{
   context = {context: new HttpContext().set(BYPASS_AUTH, true)}
 
   isLoggedIn: boolean = false
-  loggedUser$ = new BehaviorSubject<User | null | undefined>(undefined)
 
-  onLogIn: EventEmitter<string> = new EventEmitter()
-  onLogOut: EventEmitter<void> = new EventEmitter()
+  loggedUser$: BehaviorSubject<User | null | undefined> = new BehaviorSubject<User | null | undefined>(undefined)
+  token$: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined> (undefined)
 
   constructor(
     private httpClient: HttpClient,
@@ -41,7 +39,7 @@ export class LoginService{
       this.httpClient.post<{token: string}>(this.authEndpoint, userData, this.context)
       .subscribe(data => {
         let isSet: boolean = false
-        this.onLogIn.emit(data.token)
+        this.token$.next(data.token)
         this.httpClient.get<User>(this.loggedEndpoint).subscribe(user => {
           user.profileImg = "/assets/defaultAvatar.png"
           this.loggedUser$.next(user)
@@ -55,9 +53,10 @@ export class LoginService{
   login(userData: UserData) {
     this.httpClient.post<{token: string}>(this.authEndpoint, {username: userData.username, password: userData.password}, this.context)
       .subscribe(data => {
+        console.log(data);
         localStorage.setItem('username', userData.username)
         localStorage.setItem('password', userData.password)
-        this.onLogIn.emit(data.token)
+        this.token$.next(data.token)
         this.httpClient.get<User>(this.loggedEndpoint).subscribe(user => {
           user.profileImg = "/assets/defaultAvatar.png"
           this.loggedUser$.next(user)
@@ -70,7 +69,7 @@ export class LoginService{
     localStorage.removeItem('username')
     localStorage.removeItem('password')
     this.loggedUser$.next(null)
-    this.onLogOut.emit()
+    this.token$.next(undefined)
   }
 
   getUsers(): Observable<User[]>{

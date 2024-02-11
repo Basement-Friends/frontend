@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { filter, map } from 'rxjs';
 import { User } from 'src/app/classes/user';
-import { AuthService } from 'src/app/services/auth.service';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -29,12 +28,11 @@ export class UserPanelComponent implements OnInit {
 
   constructor(
     protected loginSrv: LoginService,
-    protected authSrv: AuthService,
     protected router: Router
   ){}
 
   ngOnInit(): void {
-      this.loginSrv.onLogIn.subscribe(this.updateUser())
+      this.loginSrv.token$.subscribe(() => this.updateUser())
   }
     
   private updateUser() {
