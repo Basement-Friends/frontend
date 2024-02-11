@@ -9,7 +9,7 @@ import { UsersService } from 'src/app/services/users.service';
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
-  styleUrls: ['./user-dashboard.component.scss'],
+  styleUrls: ['./user-dashboard.component.scss']
 })
 export class UserDashboardComponent implements OnInit {
 
@@ -17,34 +17,25 @@ export class UserDashboardComponent implements OnInit {
   gamer: User | undefined
   isEditing: boolean = false
 
-  matchPasswords: ValidatorFn = (group: AbstractControl) => {
-    let oldPassword = group.get('oldPassword')?.value
-    let newPassword = group.get('newPassword')?.value
-    let newPasswordRepeat = group.get('newPasswordRepeat')?.value
-    let savedPass = localStorage.getItem('password')
-    return oldPassword === savedPass && newPassword === newPasswordRepeat ? null : { notSame: true }
-  }
+  // matchPasswords: ValidatorFn = (group: AbstractControl) => {
+  //   let oldPassword = group.get('oldPassword')?.value
+  //   let newPassword = group.get('newPassword')?.value
+  //   let newPasswordRepeat = group.get('newPasswordRepeat')?.value
+  //   let savedPass = localStorage.getItem('password')
+  //   return oldPassword === savedPass && newPassword === newPasswordRepeat ? null : { notSame: true }
+  // }
 
-  eidtedUserForm: FormGroup = new FormGroup({
-    oldPassword: new FormControl('', [Validators.required]),
-    newPassword: new FormControl('', [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$'), Validators.minLength(8)]),
-    newPasswordRepeat: new FormControl('', [Validators.required])
-  },
-  {
-    validators: this.matchPasswords
-  })
+  // get oldPassword() {
+  //   return this.eidtedUserForm.get('oldPassword')
+  // }
 
-  get oldPassword() {
-    return this.eidtedUserForm.get('oldPassword')
-  }
-
-  get newPassword() {
-    return this.eidtedUserForm.get('newPassword')
-  }
+  // get newPassword() {
+  //   return this.eidtedUserForm.get('newPassword')
+  // }
   
-  get newPasswordRep(){
-    return this.eidtedUserForm.get('newPasswordRepeat')    
-  }
+  // get newPasswordRep(){
+  //   return this.eidtedUserForm.get('newPasswordRepeat')    
+  // }
 
 
   constructor(
@@ -82,9 +73,4 @@ export class UserDashboardComponent implements OnInit {
   stopEditing(){
     this.isEditing = false
   }
-
-  changePassword(){
-
-  }
-
 }

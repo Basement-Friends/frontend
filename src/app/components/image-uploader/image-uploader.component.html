@@ -1,0 +1,9 @@
+<mat-card class="card">
+    <mat-card-header>
+        Change profile picture
+    </mat-card-header>
+    <mat-card-content>
+        <input type="file" (change)="onProfileImgSelected($event)">
+    </mat-card-content>
+    <button mat-button (click)="uploadImage()" color="accent" class="button">Save</button>
+</mat-card>

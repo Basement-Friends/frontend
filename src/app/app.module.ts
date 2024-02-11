@@ -24,6 +24,8 @@ import { authInterceptor } from './interceptors/auth.interceptor';
 import { GamesComponent } from './components/games/games.component';
 import { ChatsListComponent } from './components/chats-list/chats-list.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { PasswordChangeComponent } from './components/password-change/password-change.component';
+import { ImageUploaderComponent } from './components/image-uploader/image-uploader.component';
 
 @NgModule({
   declarations: [
@@ -39,10 +41,12 @@ import { ChatComponent } from './components/chat/chat.component';
     GamesComponent,
     ChatsListComponent,
     ChatComponent,
+    PasswordChangeComponent,
   ],
   imports: [
     HttpClientModule,
     FormsModule,
+    ImageUploaderComponent,
     ReactiveFormsModule,
     MaterialsModule,
     BrowserModule,
