@@ -2,7 +2,7 @@
     <div id="backbody">
         Looking for:
         <form (submit)="startSwiping()" [formGroup]="searchSettingsForm">
-            <mat-label>Gender:</mat-label>
+            <!-- <mat-label>Gender:</mat-label>
             <mat-radio-group formControlName="gender" [(ngModel)]="selectedGender">
                 @for(gender of genders; track gender){
                     <mat-radio-button [value]="gender">
@@ -12,7 +12,7 @@
                 <mat-radio-button [value]="null">
                     Doesn't matter
                 </mat-radio-button>
-            </mat-radio-group>
+            </mat-radio-group> -->
             <mat-form-field>                
                 <mat-label>Playing games:</mat-label>
                 <input #input type="text" aria-label="Games" matInput formArrayName="games" [matAutocomplete]="auto" (input)="filter()" (focus)="filter()">

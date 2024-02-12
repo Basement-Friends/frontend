@@ -50,7 +50,7 @@ export class SwipeViewComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['users'] || changes['existingChats'])
-    console.log(this.users);
+      console.log(this.users);
   }
 
   ngOnInit(): void {
@@ -70,7 +70,9 @@ export class SwipeViewComponent implements OnInit, OnChanges {
           {
             this.existingChats.push(chat.name)
             if(this.users.length > 0)
-              this.users.filter(user => user.username === undefined ? false : this.existingChats.includes(user.username))
+              this.users = this.users.filter(user => 
+                  user.name === undefined ? false : !this.existingChats.includes(user.name)
+                )
           }          
         ))        
 
@@ -85,7 +87,11 @@ export class SwipeViewComponent implements OnInit, OnChanges {
           this.filterUsersByPreferences(this.preferedGender);
           return this.users;
         }))
-        .subscribe(users => this.users = users);
+        .subscribe(users => {
+          this.users = users
+          if(this.existingChats.length > 0)
+            this.users.filter(user => user.username === undefined ? false : this.existingChats.includes(user.username))
+        })
     }
   
   private setupValues() {
