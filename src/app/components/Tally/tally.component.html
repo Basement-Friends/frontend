@@ -24,10 +24,10 @@
 
     <mat-card class="user-card">
         <mat-card-header>
-            {{ user.username }}
+            {{ user().username }}
         </mat-card-header>
-        <mat-card-header *ngIf="user.isIncel === true">
-            <div class="incel-warning" [ngSwitch]="user.gender">
+        <mat-card-header *ngIf="user().isIncel === true">
+            <div class="incel-warning" [ngSwitch]="user().gender">
                 <p *ngSwitchCase="'Male'">Known Incel</p>
                 <p *ngSwitchCase="'Female'">Known Femcel</p>
                 <p *ngSwitchCase="'Other'">Known AssaultHelicopterCel</p>
@@ -35,11 +35,11 @@
             </div>
         </mat-card-header>
         <mat-card-subtitle>
-            {{ user.gender}}
+            {{ user().gender}}
         </mat-card-subtitle>
-        <img mat-card-image [src]="user.profileImg">
+        <img mat-card-image [src]="userImg()">
         <mat-card-content>
-            {{ user.description }}
+            {{ user().description }}
         </mat-card-content>
     </mat-card>
 </div>

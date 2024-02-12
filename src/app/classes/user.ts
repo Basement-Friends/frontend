@@ -4,7 +4,7 @@ import { GamePlatform } from "../interfaces/gamePlatform"
 import { UserGameRecord } from "./user-game-record"
 
 export class User {
-    _name: string | undefined
+    private _name: string | undefined
     private firstName: string | undefined
     get name(): string | undefined {
         if (this._name === undefined)

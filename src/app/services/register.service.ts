@@ -13,7 +13,6 @@ import { first } from 'rxjs';
 export class RegisterService {
 
   uri: string = "http://localhost:8080/api/auth/register"
-  onRegister: EventEmitter<string> = new EventEmitter()
 
   constructor(
     protected http: HttpClient,
@@ -25,7 +24,6 @@ export class RegisterService {
     this.http.post<{token: string}>(this.uri, registerData, {context: new HttpContext().set(BYPASS_AUTH, true)})
     .pipe(first())
     .subscribe(response => {
-        this.onRegister.emit(response.token)
         this.router.navigate(['/'])
         let newUserData: UserData = new UserData(registerData.username, registerData.password)
         this.loginSrv.onLogin(newUserData)

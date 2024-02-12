@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import { BehaviorSubject, catchError, first, map, throwError } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,10 @@ export class PictureService {
       this.img.next(res);
       return res
       }))
+  }
+
+  getUserPicture(username: string){
+    return this.http.get(`${this.url}/${username}`, {responseType: 'blob'})
   }
 
   updatePicture(){

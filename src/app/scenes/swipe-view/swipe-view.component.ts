@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges, WritableSignal, signal } from '@angular/core';
 import { Gender } from 'src/app/enums/gender';
 import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
 import { GamePlatform } from 'src/app/interfaces/gamePlatform';
@@ -26,17 +26,15 @@ let epic: GamePlatform = {
   templateUrl: './swipe-view.component.html',
   styleUrls: ['./swipe-view.component.scss']
 })
-export class SwipeViewComponent implements OnInit, OnChanges {
+export class SwipeViewComponent implements OnInit {
   loggedUser: User | null = null
   gamesToSearchBy: Game[] = []
   preferedGender: Gender | null = null
   users: User[] = []
+  currentUser: WritableSignal<User> = signal(new User())
   currentUserId: number = 0
 
   existingChats: string[] = []
-
-  previousUser!: User
-  nextUser!: User
 
   tallyState: TallyAnimationState = TallyAnimationState.inPlace
 
@@ -47,11 +45,6 @@ export class SwipeViewComponent implements OnInit, OnChanges {
     private chatsSrv: ChatsService,
     private router: Router
   ) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['users'] || changes['existingChats'])
-      console.log(this.users);
-  }
 
   ngOnInit(): void {
       this.setupValues();
@@ -91,12 +84,11 @@ export class SwipeViewComponent implements OnInit, OnChanges {
           this.users = users
           if(this.existingChats.length > 0)
             this.users.filter(user => user.username === undefined ? false : this.existingChats.includes(user.username))
+          this.currentUser.set(this.users[0])
         })
     }
   
   private setupValues() {
-    this.previousUser = this.getPrevGamer();
-    this.nextUser = this.getNextGamer();
     this.preferedGender = this.gamesSrv.selectedGender
     this.gamesToSearchBy = this.gamesSrv.selectedGames;
 
@@ -172,24 +164,12 @@ export class SwipeViewComponent implements OnInit, OnChanges {
   incrementGamerId(): void{
     if(++this.currentUserId > this.users.length - 1)
       this.currentUserId = 0
-    this.previousUser = this.getPrevGamer()
-    this.nextUser = this.getNextGamer()
+    this.currentUser.set(this.users[this.currentUserId])
   }
 
   decrementGamerId(): void{
     if(--this.currentUserId < 0)
       this.currentUserId = this.users.length - 1
-    this.previousUser = this.getPrevGamer()
-    this.nextUser = this.getNextGamer()
-  }
-
-  getNextGamer(): User {
-    return this.currentUserId + 1 > this.users.length - 1 ?
-      this.users[0] : this.users[this.currentUserId + 1]
-  }
-
-  getPrevGamer(): User {
-    return this.currentUserId - 1 < 0 ?
-      this.users[this.users.length - 1] : this.users[this.currentUserId - 1]
+    this.currentUser.set(this.users[this.currentUserId])
   }
 }

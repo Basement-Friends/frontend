@@ -51,7 +51,10 @@ export class ChatsService {
       catchError(this.handleError),
       first()
     )
-    .subscribe(() => window.location.reload())
+    .subscribe(() => {
+      debugger
+      console.log("sent");
+      window.location.reload()})
   }
 
   private handleError(error: HttpErrorResponse) {

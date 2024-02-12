@@ -21,6 +21,7 @@ export class LoginService{
   isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
   loggedUser$: BehaviorSubject<User | null | undefined> = new BehaviorSubject<User | null | undefined>(undefined)
+  loggedUser = signal<User| null | undefined>(undefined)
   token$: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined> (undefined)
 
   constructor(
@@ -67,6 +68,7 @@ export class LoginService{
           localStorage.setItem('username', userData.username)
           localStorage.setItem('password', userData.password)
           this.loggedUser$.next(user);
+          this.loggedUser.set(user)
           this.isLoggedIn$.next(true)
           this.router.navigate(["/"])
           isSet = true;

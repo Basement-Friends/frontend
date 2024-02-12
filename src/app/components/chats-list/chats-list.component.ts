@@ -37,7 +37,8 @@ export class ChatsListComponent implements OnInit {
           this.chats.update(val => ([...val, chat]))
           ) })
       }
-    })
+    }
+    )
   }
 
   select(data: ChatData){

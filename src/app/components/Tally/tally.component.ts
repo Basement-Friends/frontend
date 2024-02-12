@@ -1,7 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, inject, signal, effect, WritableSignal } from '@angular/core';
 import { User } from 'src/app/classes/user';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
+import { PictureService } from 'src/app/services/picture.service';
+import { first } from 'rxjs';
 
 @Component({
   selector: 'app-tally',
@@ -61,7 +63,7 @@ import { TallyAnimationState } from 'src/app/enums/tally-animation-state';
 export class TallyComponent{
 
   @Input()
-  user!: User;
+  user: WritableSignal<User> = signal(new User())
 
   @Input()
   state: TallyAnimationState = TallyAnimationState.fadeIn
@@ -75,15 +77,33 @@ export class TallyComponent{
   @Output()
   startedChat: EventEmitter<User> = new EventEmitter<User>()
 
+  pictureSrv: PictureService = inject(PictureService)
+  userImg = signal("")
+
+  constructor() {
+    effect(() => {
+      let tmpUsr: User = this.user()
+      tmpUsr.username !== undefined &&
+      this.pictureSrv.getUserPicture(tmpUsr.username)
+        .pipe(first())
+        .subscribe(img => {
+          let blob = new Blob([img], { type: 'image/jpg' });
+          let url = window.URL.createObjectURL(blob);
+          this.userImg.set(url)
+        })
+
+    }, {allowSignalWrites: true})
+  }
+
   onAnimationEnd(s: TallyAnimationState) {
     this.animationEnded.emit(s)
   }
 
   onStartedChat() {
-    this.startedChat.emit(this.user)
+    this.startedChat.emit(this.user())
   }
 
   onRejected() {
-    this.rejected.emit(this.user)
+    this.rejected.emit(this.user())
   }
 }

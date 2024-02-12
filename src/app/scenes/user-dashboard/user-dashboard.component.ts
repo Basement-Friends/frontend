@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect, signal } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { filter, first, map } from 'rxjs';
@@ -16,6 +16,8 @@ export class UserDashboardComponent implements OnInit {
   loggedUser: User | null = null
   gamer: User | undefined
   isEditing: boolean = false
+
+  currentUser = signal<User | null | undefined>(undefined)
 
   // matchPasswords: ValidatorFn = (group: AbstractControl) => {
   //   let oldPassword = group.get('oldPassword')?.value
@@ -37,12 +39,13 @@ export class UserDashboardComponent implements OnInit {
   //   return this.eidtedUserForm.get('newPasswordRepeat')    
   // }
 
-
+//    effect(() => console.log("currentUser: ", this.currentUser()))
   constructor(
     private loginSrv: LoginService,
     private usersSrv: UsersService,
-    private router: Router
-  ){}
+    private router: Router,
+    
+  ){ }
 
   ngOnInit(): void {
     this.usersSrv.getCurrentUserGamer()
@@ -53,9 +56,10 @@ export class UserDashboardComponent implements OnInit {
       filter(currentUser => currentUser !== undefined),
       map(currentUser => {
         if(currentUser !== undefined && currentUser !== null)
-          this.loggedUser = currentUser
-      }))
+        this.loggedUser = currentUser
+    }))
     .subscribe()
+    this.currentUser = this.loginSrv.loggedUser
   }
 
   toSwiping() {

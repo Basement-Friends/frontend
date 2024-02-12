@@ -15,7 +15,11 @@ export class SwipeSettingsComponent implements OnInit {
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   
   
-  games: Game[] = []
+  games: Game[] = [
+    {id: 0, name: "Europa Universalis IV"},
+    {id: 1, name: "Sid Meier's Civilization V"},
+    {id: 2, name: "Counter Strike: Global Offensive"},
+  ]
   private _selectedGames: Game[] = []
   
   filteredOptions: Game[] = []
@@ -45,17 +49,17 @@ export class SwipeSettingsComponent implements OnInit {
     private userService: UsersService,
     ){}
     
-    ngOnInit() {
-      this.gamesService.getGames().subscribe( games => {
-        this.games.push(...games)
-      })
-      this.searchSettingsForm.valueChanges.subscribe(this.updateSettings)
-    }
-    
-    updateSettings(e: any) {
-      this.selectedGender = e.gender
-      if(e.game !== null)
-      this._selectedGames.push(e.game)
+  ngOnInit() {
+    this.gamesService.getGames().subscribe( games => {
+      this.games.push(...games)
+    })
+    this.searchSettingsForm.valueChanges.subscribe(this.updateSettings)
+  }
+  
+  updateSettings(e: any) {
+    this.selectedGender = e.gender
+    if(e.game !== null)
+    this._selectedGames.push(e.game)
   }
   
   addGame(game: Game) {

@@ -60,7 +60,8 @@ export class ChatComponent implements OnChanges, OnInit {
     let msg: Message = new Message()
     msg.chatId = this.data.chatId
     msg.msgText = this.msgControl.value
-    this.msgInput.value = ""
+    this.msgControl.reset()
+    debugger
     this.chatSrv.sendMessage(msg)
   }
 }
