@@ -11,6 +11,7 @@ import { ChatData } from './components/chats-list/chats-list.component';
 export class AppComponent implements OnInit {
   title = 'basement-friends';
   @ViewChild('nestedDrawer') nestedDrawer!: any
+  @ViewChild('drawer') drawer! : any
 
   selectedChatData: ChatData = new ChatData()
 
@@ -20,7 +21,11 @@ export class AppComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-      this.loginService.onInit()
+    this.loginService.onInit()
+    this.loginService.isLoggedIn$.subscribe(isLoggedIn => {
+      if(!isLoggedIn)
+        this.drawer.close()
+    })
   }
 
   backHome(){
@@ -30,7 +35,6 @@ export class AppComponent implements OnInit {
   chatSelected(chatData: ChatData){
     if(this.selectedChatData.chatId === chatData.chatId)
         this.nestedDrawer.toggle()
-      // this.nestedDrawer++
     this.selectedChatData = chatData
   }
 }

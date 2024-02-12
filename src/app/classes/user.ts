@@ -4,7 +4,18 @@ import { GamePlatform } from "../interfaces/gamePlatform"
 import { UserGameRecord } from "./user-game-record"
 
 export class User {
-    name: string | undefined
+    _name: string | undefined
+    private firstName: string | undefined
+    get name(): string | undefined {
+        if (this._name === undefined)
+            return this.firstName
+        return this._name
+    }
+    set name(name: string | undefined) {
+        this._name = name
+        this.firstName = name
+    }
+
     lastName: string | undefined
     private _username: string | undefined
     get username(): string | undefined { 
@@ -29,7 +40,7 @@ export class User {
     private ranks: any[] = []
 
     copy(user: User){
-        this.name = user.name        
+        this.name = user.name !== undefined ? user.name : user.firstName
         this.lastName = user.lastName
         this.nickname = user.nickname
         this.description = user.description

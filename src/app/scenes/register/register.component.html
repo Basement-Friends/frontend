@@ -29,7 +29,7 @@
                         Password requires 8 signs, capital case and lower case signs and numbers!
                     </mat-error>
                 }
-                <input matInput formControlName="password" required>
+                <input matInput type="password" formControlName="password" required>
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Repeat password</mat-label>
@@ -38,7 +38,7 @@
                         Passwords don't match!
                     </mat-error>
                 }
-                <input matInput formControlName="passwordRepeat" required [errorStateMatcher]="matcher">
+                <input matInput type="password" formControlName="passwordRepeat" required [errorStateMatcher]="matcher">
             </mat-form-field>
             <button mat-button type="submit" [disabled]="registerForm.invalid">Register</button>
         </form>
