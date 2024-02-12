@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, effect } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, WritableSignal, effect, signal } from '@angular/core';
 import { ChatData } from '../chats-list/chats-list.component';
 import { ChatsService } from 'src/app/services/chats.service';
 import { Message } from 'src/app/classes/message';
@@ -19,8 +19,8 @@ export interface ReceivedMsg {
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class ChatComponent implements OnChanges {
-  @Input() data!: ChatData
+export class ChatComponent {
+  @Input() data: WritableSignal<ChatData> = signal(new ChatData())
   @ViewChild('msgTextArea') msgInput: any
   messages: ReceivedMsg[] = []
   currentUser: User | null | undefined = new User()
@@ -34,10 +34,10 @@ export class ChatComponent implements OnChanges {
   ) {
     effect(() => {
       if(this.loginSrv.isLoggedIn()){
-        this.messagesSub =this.chatSrv.getMessages(this.data.chatId)
-          .pipe(first())
-          .subscribe()
-        }
+          this.chatSrv.getMessages(this.data().chatId)
+            .pipe(first())
+            .subscribe()
+      }
       else{
         this.messages = []  
       }
@@ -45,25 +45,19 @@ export class ChatComponent implements OnChanges {
     effect(() => {
       if(loginSrv.loggedUser() !== null && loginSrv.loggedUser() !== undefined)
         this.currentUser = loginSrv.loggedUser()
+    }),
+    effect(() => {
+      console.log("updating recent");
+      if(chatSrv.recentMessages().length > 0)
+        this.messages = this.chatSrv.recentMessages()
+      else
+        this.messages = []
     })
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['data']) {
-      if(this.messagesSub !== null)
-        this.messagesSub.unsubscribe()
-      if(this.data.chatId !== "")
-        this.messagesSub = this.chatSrv.getMessages(this.data.chatId)
-          .subscribe((messages: ReceivedMsg[]) =>{ 
-            this.messages = messages
-            console.log(this.messages);
-          })
-    }
   }
 
   sendMessage() {
     let msg: Message = new Message()
-    msg.chatId = this.data.chatId
+    msg.chatId = this.data().chatId
     msg.msgText = this.msgControl.value
     this.msgControl.reset()
     this.chatSrv.sendMessage(msg)

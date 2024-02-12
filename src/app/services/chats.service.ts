@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { catchError, first, map, throwError } from 'rxjs';
+import { Injectable, WritableSignal, signal } from '@angular/core';
+import { catchError, first, map, tap, throwError } from 'rxjs';
 import { Message } from '../classes/message';
 import { User } from '../classes/user';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -19,6 +19,8 @@ export class ChatsService {
   // private msgSubject$ = new Subject()
   // public msg$ = this.msgSubject$.pipe(switchAll(), catchError(e => {throw e}))
 
+  recentMessages: WritableSignal<ReceivedMsg[]> = signal([])
+
   constructor(
     private http: HttpClient
   ) { }
@@ -27,8 +29,7 @@ export class ChatsService {
   createChat(author: User, receiver: User){
     console.log(author, receiver);
     this.http.post(`${this.chatUrl}/create`, { usernames: [author.username, receiver.username]}).subscribe(rv => {
-      console.log(rv)
-      this.getChats();
+      this.getChats()
       window.location.reload()
     })
   }
@@ -43,6 +44,12 @@ export class ChatsService {
 
   getMessages(chatId: string) {
     return this.http.get<ReceivedMsg[]>(`${this.chatUrl}/getMessages/${chatId}`)
+      .pipe(
+        tap(messages => {
+          this.recentMessages.set(messages)
+          return messages          
+        }))
+        
   }
 
   sendMessage(msg: Message) {
@@ -52,9 +59,10 @@ export class ChatsService {
       first()
     )
     .subscribe(() => {
-      debugger
-      console.log("sent");
-      window.location.reload()})
+      this.getMessages(msg.chatId)
+        .pipe(first()).subscribe()
+    
+    })
   }
 
   private handleError(error: HttpErrorResponse) {

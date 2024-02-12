@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, effect } from '@angular/core';
+import { Component, OnInit, ViewChild, WritableSignal, effect, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { ChatData } from './components/chats-list/chats-list.component';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -10,19 +11,20 @@ import { ChatData } from './components/chats-list/chats-list.component';
 })
 export class AppComponent {
   title = 'basement-friends';
-  @ViewChild('nestedDrawer') nestedDrawer!: any
-  @ViewChild('drawer') drawer! : any
+  @ViewChild('nestedDrawer') nestedDrawer!: MatDrawer
+  @ViewChild('drawer') drawer! : MatDrawer
 
-  selectedChatData: ChatData = new ChatData()
+  selectedChatData: WritableSignal<ChatData> = signal(new ChatData())
 
   constructor(
     private router: Router,
     private loginService: LoginService
   ){
     effect(() => {
-      if(loginService.isLoggedIn())
+      if(!loginService.isLoggedIn()){
+        this.nestedDrawer.close()
         this.drawer.close()
-    })
+      }})
 
   }
 
@@ -31,8 +33,8 @@ export class AppComponent {
   }
 
   chatSelected(chatData: ChatData){
-    if(this.selectedChatData.chatId === chatData.chatId)
+    if(this.selectedChatData().chatId === chatData.chatId)
         this.nestedDrawer.toggle()
-    this.selectedChatData = chatData
+    this.selectedChatData.set(chatData)
   }
 }

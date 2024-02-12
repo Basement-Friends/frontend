@@ -1,4 +1,4 @@
 export class Message {
-    chatId: String = ""
+    chatId: string = ""
     msgText: string = ""
 }

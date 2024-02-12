@@ -71,7 +71,6 @@ export class LoginService{
           localStorage.setItem('password', userData.password)
           this.loggedUser$.next(user);
           this.loggedUser.set(user)
-          // this.isLoggedIn$.next(true)
           this.isLoggedIn.set(true)
           this.router.navigate(["/"])
           isSet = true;
@@ -100,7 +99,6 @@ export class LoginService{
     this.loggedUser$.next(null)
     this.token$.next(undefined)
     this.isLoggedIn.set(false)
-    // this.isLoggedIn$.next(false)
   }
 
   getUsers(): Observable<User[]>{
