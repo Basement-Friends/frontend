@@ -2,14 +2,18 @@
     <h2>
         {{ data.name }}
     </h2>
-    @for (message of messages; track $index) {
-        <mat-card class="message-bubble">
+    <div class="messages">
+        @for (message of messages; track $index) {
+            <mat-card class="message-bubble" 
+                [ngClass]="{'own': currentUser?.username === message.sender.username, 'received': currentUser?.username !== message.sender.username}"
+                >
             <mat-card-content>
                 {{ message.message }}
             </mat-card-content>
         </mat-card>
         <mat-divider></mat-divider>
-    }
+        }
+    </div>
     <mat-divider id="final-divider"></mat-divider>
     <div class="message-creator">
         <form (submit)="sendMessage()">

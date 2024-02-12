@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, effect } from '@angular/core';
 import { ChatData } from '../chats-list/chats-list.component';
 import { ChatsService } from 'src/app/services/chats.service';
 import { Message } from 'src/app/classes/message';
@@ -23,6 +23,7 @@ export class ChatComponent implements OnChanges, OnInit {
   @Input() data!: ChatData
   @ViewChild('msgTextArea') msgInput: any
   messages: ReceivedMsg[] = []
+  currentUser: User | null | undefined = new User()
 
   messagesSub: Subscription | null = null
   msgControl: FormControl = new FormControl('', [Validators.required])
@@ -30,7 +31,13 @@ export class ChatComponent implements OnChanges, OnInit {
   constructor(
     private chatSrv: ChatsService,
     private loginSrv: LoginService
-  ) {}
+  ) {
+    effect(() => {
+      if(loginSrv.loggedUser() !== null && loginSrv.loggedUser() !== undefined)
+        this.currentUser = loginSrv.loggedUser()
+      console.log("current user: ", this.currentUser);
+    })
+  }
 
   ngOnInit(): void {
     this.loginSrv.isLoggedIn$.subscribe(isIn => {
@@ -39,8 +46,7 @@ export class ChatComponent implements OnChanges, OnInit {
           .pipe(first())
           .subscribe()
       else
-        this.messages = []
-      
+        this.messages = []      
     })
   }
 
@@ -52,6 +58,7 @@ export class ChatComponent implements OnChanges, OnInit {
         this.messagesSub = this.chatSrv.getMessages(this.data.chatId)
           .subscribe((messages: ReceivedMsg[]) =>{ 
             this.messages = messages
+            console.log(this.messages);
           })
     }
   }
@@ -61,7 +68,6 @@ export class ChatComponent implements OnChanges, OnInit {
     msg.chatId = this.data.chatId
     msg.msgText = this.msgControl.value
     this.msgControl.reset()
-    debugger
     this.chatSrv.sendMessage(msg)
   }
 }

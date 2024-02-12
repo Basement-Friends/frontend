@@ -5,6 +5,26 @@
     justify-content: center;
 }
 
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+
+    .message-bubble {
+        width: 95%;
+    }
+
+    .own {
+        align-self: flex-end;
+        background-color: rgb(175, 194, 255);
+    }
+
+    .received {
+        align-self: flex-start;
+        background-color: rgb(175, 255, 242);;
+    }
+}
+
 #final-divider {
     flex-grow: 2;
     background-color: tomato;
