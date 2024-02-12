@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { ChatData } from './components/chats-list/chats-list.component';
@@ -8,7 +8,7 @@ import { ChatData } from './components/chats-list/chats-list.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'basement-friends';
   @ViewChild('nestedDrawer') nestedDrawer!: any
   @ViewChild('drawer') drawer! : any
@@ -18,14 +18,12 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private loginService: LoginService
-  ){}
-
-  ngOnInit(): void {
-    this.loginService.onInit()
-    this.loginService.isLoggedIn$.subscribe(isLoggedIn => {
-      if(!isLoggedIn)
+  ){
+    effect(() => {
+      if(loginService.isLoggedIn())
         this.drawer.close()
     })
+
   }
 
   backHome(){

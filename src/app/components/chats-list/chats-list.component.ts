@@ -17,7 +17,7 @@ export class ChatData {
   templateUrl: './chats-list.component.html',
   styleUrl: './chats-list.component.scss',
 })
-export class ChatsListComponent implements OnInit {
+export class ChatsListComponent {
 
   @Output() chatOpened: EventEmitter<ChatData> = new EventEmitter<ChatData>()
 
@@ -26,19 +26,16 @@ export class ChatsListComponent implements OnInit {
   constructor(
     private chatsSrv: ChatsService,
     private loginSrv: LoginService
-  ) {}
-
-  ngOnInit(): void {
-    this.loginSrv.isLoggedIn$.subscribe(isLoggedIn => {
-      if(isLoggedIn){
+  ) {
+    effect(() => {
+      if(loginSrv.isLoggedIn()){
         this.chatsSrv.getChats().subscribe(chat => {
-        this.chats.update(() => [])
-        chat.forEach(chat => 
-          this.chats.update(val => ([...val, chat]))
-          ) })
+          this.chats.update(() => [])
+          chat.forEach(chat => 
+            this.chats.update(val => ([...val, chat]))
+            ) })
       }
-    }
-    )
+    })
   }
 
   select(data: ChatData){

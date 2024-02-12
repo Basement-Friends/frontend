@@ -19,7 +19,7 @@ export interface ReceivedMsg {
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class ChatComponent implements OnChanges, OnInit {
+export class ChatComponent implements OnChanges {
   @Input() data!: ChatData
   @ViewChild('msgTextArea') msgInput: any
   messages: ReceivedMsg[] = []
@@ -33,19 +33,18 @@ export class ChatComponent implements OnChanges, OnInit {
     private loginSrv: LoginService
   ) {
     effect(() => {
-      if(loginSrv.loggedUser() !== null && loginSrv.loggedUser() !== undefined)
-        this.currentUser = loginSrv.loggedUser()
-    })
-  }
-
-  ngOnInit(): void {
-    this.loginSrv.isLoggedIn$.subscribe(isIn => {
-      if(isIn)
+      if(this.loginSrv.isLoggedIn()){
         this.messagesSub =this.chatSrv.getMessages(this.data.chatId)
           .pipe(first())
           .subscribe()
-      else
-        this.messages = []      
+        }
+      else{
+        this.messages = []  
+      }
+    }),
+    effect(() => {
+      if(loginSrv.loggedUser() !== null && loginSrv.loggedUser() !== undefined)
+        this.currentUser = loginSrv.loggedUser()
     })
   }
 

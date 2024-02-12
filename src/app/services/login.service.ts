@@ -1,5 +1,5 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { Injectable, WritableSignal, signal } from '@angular/core';
+import { Injectable, WritableSignal, effect, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, first } from 'rxjs';
 import { UserData } from '../classes/user-data';
@@ -18,7 +18,8 @@ export class LoginService{
   userUrl: string = "http://localhost:8080/api/user"
   context = {context: new HttpContext().set(BYPASS_AUTH, true)}
 
-  isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+  // isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+  isLoggedIn: WritableSignal<boolean> = signal(false)
 
   loggedUser$: BehaviorSubject<User | null | undefined> = new BehaviorSubject<User | null | undefined>(undefined)
   loggedUser = signal<User| null | undefined>(undefined)
@@ -29,6 +30,7 @@ export class LoginService{
     private pictureSrv: PictureService,
     private router: Router
   ) { 
+    effect(() => this.onInit())
   }
 
   onInit() {
@@ -69,7 +71,8 @@ export class LoginService{
           localStorage.setItem('password', userData.password)
           this.loggedUser$.next(user);
           this.loggedUser.set(user)
-          this.isLoggedIn$.next(true)
+          // this.isLoggedIn$.next(true)
+          this.isLoggedIn.set(true)
           this.router.navigate(["/"])
           isSet = true;
         });
@@ -96,7 +99,8 @@ export class LoginService{
     localStorage.removeItem('password')
     this.loggedUser$.next(null)
     this.token$.next(undefined)
-    this.isLoggedIn$.next(false)
+    this.isLoggedIn.set(false)
+    // this.isLoggedIn$.next(false)
   }
 
   getUsers(): Observable<User[]>{

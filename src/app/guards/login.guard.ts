@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, filter, map } from 'rxjs';
 import { LoginService } from '../services/login.service';
+import { User } from '../classes/user';
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +16,11 @@ export class LoginGuard {
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean>{
-      return this.loginSrv.loggedUser$.pipe(
-        filter(currentUser => {
-          return currentUser !== undefined}),
-        map(currentUser => {
-          if(currentUser)
-             return true
-          else {
-            this.router.navigateByUrl("/login") 
-            return false
-          }
-      }))
+    state: RouterStateSnapshot): boolean{
+      let user: User | null | undefined = this.loginSrv.loggedUser()
+      if(user === undefined || user === null)
+        return false
+      return true
   }
   
 }
