@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, first, throwError } from 'rxjs';
+import { catchError, first, map, throwError } from 'rxjs';
 import { Message } from '../classes/message';
 import { User } from '../classes/user';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -29,11 +29,16 @@ export class ChatsService {
     this.http.post(`${this.chatUrl}/create`, { usernames: [author.username, receiver.username]}).subscribe(rv => {
       console.log(rv)
       this.getChats();
+      window.location.reload()
     })
   }
   
   getChats() {
-    return this.http.get<ChatData[]>(`${this.chatUrl}/myChats`)
+    return this.http.get<ChatData[]>(`${this.chatUrl}/myChats`).pipe(
+      map(chat =>{
+        return chat
+      })
+    )
   }
 
   getMessages(chatId: string) {
@@ -46,7 +51,7 @@ export class ChatsService {
       catchError(this.handleError),
       first()
     )
-    .subscribe()
+    .subscribe(() => window.location.reload())
   }
 
   private handleError(error: HttpErrorResponse) {

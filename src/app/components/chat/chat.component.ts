@@ -2,9 +2,10 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@
 import { ChatData } from '../chats-list/chats-list.component';
 import { ChatsService } from 'src/app/services/chats.service';
 import { Message } from 'src/app/classes/message';
-import { Subscription } from 'rxjs';
+import { Subscription, first } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
 import { User } from 'src/app/classes/user';
+import { LoginService } from 'src/app/services/login.service';
 
 export interface ReceivedMsg {
   sender: User
@@ -27,12 +28,20 @@ export class ChatComponent implements OnChanges, OnInit {
   msgControl: FormControl = new FormControl('', [Validators.required])
 
   constructor(
-    private chatSrv: ChatsService
+    private chatSrv: ChatsService,
+    private loginSrv: LoginService
   ) {}
 
   ngOnInit(): void {
-    this.chatSrv.getMessages(this.data.chatId)
-      .subscribe()
+    this.loginSrv.isLoggedIn$.subscribe(isIn => {
+      if(isIn)
+        this.messagesSub =this.chatSrv.getMessages(this.data.chatId)
+          .pipe(first())
+          .subscribe()
+      else
+        this.messages = []
+      
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {

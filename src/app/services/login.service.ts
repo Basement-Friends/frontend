@@ -18,7 +18,7 @@ export class LoginService{
   userUrl: string = "http://localhost:8080/api/user"
   context = {context: new HttpContext().set(BYPASS_AUTH, true)}
 
-  isLoggedIn: boolean = false
+  isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
   loggedUser$: BehaviorSubject<User | null | undefined> = new BehaviorSubject<User | null | undefined>(undefined)
   token$: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined> (undefined)
@@ -64,9 +64,10 @@ export class LoginService{
         this.httpClient.get<User>(this.userUrl).subscribe(user => {
           user.profileImg = "/assets/defaultAvatar.png";
           this.loadProfileImg(user);
-          this.loggedUser$.next(user);
           localStorage.setItem('username', userData.username)
           localStorage.setItem('password', userData.password)
+          this.loggedUser$.next(user);
+          this.isLoggedIn$.next(true)
           this.router.navigate(["/"])
           isSet = true;
         });
@@ -85,7 +86,7 @@ export class LoginService{
   }
 
   changePassword(oldData: {oldPassword: string, newPassword: string, repeatPassword: string}) {
-    return this.httpClient.put(`${this.userUrl}/changePassword`, oldData)
+    return this.httpClient.put(`${this.userUrl}/changePassword`, oldData).pipe(first()).subscribe(e => console.log(e))
   }
 
   logout() {
@@ -93,6 +94,7 @@ export class LoginService{
     localStorage.removeItem('password')
     this.loggedUser$.next(null)
     this.token$.next(undefined)
+    this.isLoggedIn$.next(false)
   }
 
   getUsers(): Observable<User[]>{

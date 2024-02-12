@@ -1,6 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, effect, signal } from '@angular/core';
 import { User } from 'src/app/classes/user';
 import { ChatsService } from 'src/app/services/chats.service';
+import { LoginService } from 'src/app/services/login.service';
 
 
 export class ChatData {
@@ -20,17 +21,23 @@ export class ChatsListComponent implements OnInit {
 
   @Output() chatOpened: EventEmitter<ChatData> = new EventEmitter<ChatData>()
 
-  chats: ChatData[] = []
-
+  chats = signal<ChatData[]>([])
 
   constructor(
-    private chatsSrv: ChatsService
+    private chatsSrv: ChatsService,
+    private loginSrv: LoginService
   ) {}
 
   ngOnInit(): void {
-      this.chatsSrv.getChats().subscribe(chat => {
-        chat.forEach(chat => this.chats.push(chat))
-      })
+    this.loginSrv.isLoggedIn$.subscribe(isLoggedIn => {
+      if(isLoggedIn){
+        this.chatsSrv.getChats().subscribe(chat => {
+        this.chats.update(() => [])
+        chat.forEach(chat => 
+          this.chats.update(val => ([...val, chat]))
+          ) })
+      }
+    })
   }
 
   select(data: ChatData){

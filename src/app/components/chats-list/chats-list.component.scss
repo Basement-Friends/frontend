@@ -1,5 +1,4 @@
 .wrapper {
-    // margin-left: 3vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,9 +10,14 @@
     flex-direction: column;
     justify-content: center;
     gap: 2vh;
+}
 
-    .chat {
-        border: solid 2px;
-        border-radius: 10%;
-    }
+.chat {
+    border-radius: 5%;
+    transition: background-color 500ms ease-in-out;
+}
+
+.chat:hover {
+    border-radius: 5%;
+    background-color: #5a5a5a;
 }

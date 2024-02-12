@@ -2,11 +2,12 @@
     <h2 class="header">Your DM's</h2>
     
     <div class="chats">
-        @for (chat of chats; track $index) {
-            <div class="chat" (click)="select(chat)">
-                {{ chat.name }}
-            </div>
+        @for (chat of chats(); track $index) {
+            <mat-card class="chat" (click)="select(chat)">
+                <mat-card-content>
+                    {{ chat.name }}
+                </mat-card-content>
+            </mat-card>
         }
-    </div>
-    
+    </div>    
 </div>
