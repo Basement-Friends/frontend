@@ -35,7 +35,6 @@ export class ChatComponent implements OnChanges, OnInit {
     effect(() => {
       if(loginSrv.loggedUser() !== null && loginSrv.loggedUser() !== undefined)
         this.currentUser = loginSrv.loggedUser()
-      console.log("current user: ", this.currentUser);
     })
   }
 

@@ -54,11 +54,11 @@ export class LoginService{
   }
   
   onLogin(userData: UserData) {
-    this.logIn(userData)
+    return this.logIn(userData)
   }
 
   private logIn(userData: UserData) {
-    this.httpClient.post<{ token: string; }>(this.authUrl, userData, this.context)
+    return this.httpClient.post<{ token: string; }>(this.authUrl, userData, this.context)
       .subscribe(data => {
         let isSet: boolean = false;
         this.token$.next(data.token);

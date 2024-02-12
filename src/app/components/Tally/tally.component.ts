@@ -83,14 +83,15 @@ export class TallyComponent{
   constructor() {
     effect(() => {
       let tmpUsr: User = this.user()
-      tmpUsr.username !== undefined &&
-      this.pictureSrv.getUserPicture(tmpUsr.username)
-        .pipe(first())
-        .subscribe(img => {
-          let blob = new Blob([img], { type: 'image/jpg' });
-          let url = window.URL.createObjectURL(blob);
-          this.userImg.set(url)
-        })
+      this.userImg.set(tmpUsr.profileImg)
+      if(tmpUsr.username !== undefined){
+        this.pictureSrv.getUserPicture(tmpUsr.username)
+          .pipe(first())
+          .subscribe(img => {
+            let blob = new Blob([img], { type: 'image/jpg' });
+            let url = window.URL.createObjectURL(blob);
+            this.userImg.set(url)
+          })}
 
     }, {allowSignalWrites: true})
   }

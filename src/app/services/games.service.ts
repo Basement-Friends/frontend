@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, first } from 'rxjs';
 import { Game } from '../interfaces/game';
 
 @Injectable({
@@ -21,6 +21,7 @@ export class GamesService {
 
   addGame(newGame: Game) {
     this.http.put(this.gamersUrl + "/updateProfile", { game: newGame.name, gameStartDate: newGame.gameStartDate, additionalInformation: newGame.additionalInformation})
-    .subscribe(e => console.log(e))
+    .pipe(first())
+    .subscribe()
   }
 }

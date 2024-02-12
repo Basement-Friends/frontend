@@ -6,6 +6,7 @@ import { BYPASS_AUTH } from '../interceptors/auth.interceptor';
 import { UserData } from '../classes/user-data';
 import { LoginService } from './login.service';
 import { first } from 'rxjs';
+import { PictureService } from './picture.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class RegisterService {
   constructor(
     protected http: HttpClient,
     protected loginSrv: LoginService,
+    protected picsSrv: PictureService,
     private router: Router
   ) { }
 
@@ -24,10 +26,10 @@ export class RegisterService {
     this.http.post<{token: string}>(this.uri, registerData, {context: new HttpContext().set(BYPASS_AUTH, true)})
     .pipe(first())
     .subscribe(response => {
-        this.router.navigate(['/'])
-        let newUserData: UserData = new UserData(registerData.username, registerData.password)
-        this.loginSrv.onLogin(newUserData)
-      })
+      let newUserData: UserData = new UserData(registerData.username, registerData.password)
+      this.loginSrv.onLogin(newUserData)      
+      this.router.navigate(['/'])
+    })
   }
 
   validate() {
