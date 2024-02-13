@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, WritableSignal, effect, signal } from '@angular/core';
+import { Component, ViewChild, WritableSignal, effect, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { ChatData } from './components/chats-list/chats-list.component';
@@ -33,8 +33,8 @@ export class AppComponent {
   }
 
   chatSelected(chatData: ChatData){
-    if(this.selectedChatData().chatId === chatData.chatId)
-        this.nestedDrawer.toggle()
+    if(this.selectedChatData().chatId === chatData.chatId || this.selectedChatData().chatId === '')
+      this.nestedDrawer.toggle()
     this.selectedChatData.set(chatData)
   }
 }

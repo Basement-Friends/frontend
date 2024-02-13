@@ -47,7 +47,6 @@ export class ChatComponent {
         this.currentUser = loginSrv.loggedUser()
     }),
     effect(() => {
-      console.log("updating recent");
       if(chatSrv.recentMessages().length > 0)
         this.messages = this.chatSrv.recentMessages()
       else
